@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MoveAndSee</string>
+    <string name="menu_home">Accueil</string>
+    <string name="title_activity_maps">Carte</string>
+    <string name="menu_profile">Profil</string>
+    <string name="menu_create_interest_point">Créer un nouveau point d\'intérêt</string>
+    <string name="menu_create_unknown_point">Créer un nouveau point inconnu</string>
+    <string name="menu_sign_out">Se déconnecter</string>
+</resources>
