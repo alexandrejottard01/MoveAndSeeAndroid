@@ -6,4 +6,11 @@
     <string name="menu_create_interest_point">Create a new point of interest</string>
     <string name="menu_create_unknown_point">Create a new unknown point</string>
     <string name="menu_sign_out">Sign out</string>
+    <string name="title_create_description">Create a description</string>
+    <string name="title_create_interest_point">Create a point of interest</string>
+    <string name="title_create_unknown_point">Create a unknown point</string>
+    <string name="title_home_connected">Home</string>
+    <string name="title_home_not_connected">Log in</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_registration">Registration</string>
 </resources>

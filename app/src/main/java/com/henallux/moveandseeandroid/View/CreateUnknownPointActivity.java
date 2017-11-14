@@ -18,6 +18,7 @@ public class CreateUnknownPointActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_unknown_point);
+        setTitle(getString(R.string.title_create_unknown_point));
     }
 
     @Override

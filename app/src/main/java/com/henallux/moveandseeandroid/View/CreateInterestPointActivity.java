@@ -18,6 +18,7 @@ public class CreateInterestPointActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_interest_point);
+        setTitle(getString(R.string.title_create_interest_point));
     }
 
     @Override
