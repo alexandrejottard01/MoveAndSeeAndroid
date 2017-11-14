@@ -28,7 +28,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".View.MapsActivity"
+            android:name=".View.HomeConnectedActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,6 +36,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".View.CreateDescriptionOfInterestPointActivity" />
+        <activity android:name=".View.CreateDescriptionOfUnknownPointActivity" />
+        <activity android:name=".View.CreateInterestPointActivity" />
+        <activity android:name=".View.CreateUnknownPointActivity" />
+        <activity android:name=".View.HomeNotConnectedActivity" />
+        <activity android:name=".View.ProfileActivity" />
+        <activity android:name=".View.RegistrationActivity" />
     </application>
 
 </manifest>

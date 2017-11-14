@@ -5,25 +5,25 @@
     <item
         android:id="@+id/action_home"
         android:title="@string/menu_home"
-        android:icon="@android:drawable/ic_menu_home"
+        android:icon="@android:drawable/ic_btn_speak_now"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_profile"
         android:title="@string/menu_profile"
-        android:icon="@android:drawable/ic_menu_allfriends"
+        android:icon="@android:drawable/ic_menu_gallery"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_create_interest_point"
         android:title="@string/menu_create_interest_point"
-        android:icon="@android:drawable/ic_menu_btn_add"
+        android:icon="@android:drawable/ic_dialog_dialer"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_create_unknown_point"
         android:title="@string/menu_create_unknown_point"
-        android:icon="@android:drawable/ic_menu_btn_add"
+        android:icon="@android:drawable/ic_dialog_alert"
         app:showAsAction="never" />
 
     <item
