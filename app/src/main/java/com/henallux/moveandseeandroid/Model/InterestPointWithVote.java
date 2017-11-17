@@ -8,4 +8,9 @@ public class InterestPointWithVote {
 
     public InterestPoint interestPoint;
     public int moyenne;
+
+    public InterestPointWithVote(InterestPoint interestPoint, int moyenne) {
+        this.interestPoint = interestPoint;
+        this.moyenne = moyenne;
+    }
 }
