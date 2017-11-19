@@ -9,4 +9,56 @@
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/name_interest_with_average"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:paddingBottom="5dp"
+            android:textColor="#000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/address_interest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/name_interest_with_average"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="0dp"
+            android:paddingBottom="5dp"
+            android:textSize="11dp" />
+
+        <EditText
+            android:id="@+id/description_interest"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/address_interest"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_add_description"
+            android:ems="10"
+            android:gravity="top"
+            android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/button_submit_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/description_interest"
+            android:text="@string/button_submit"
+            android:layout_centerHorizontal="true" />
+
+
+    </RelativeLayout>
+
 </LinearLayout>
+

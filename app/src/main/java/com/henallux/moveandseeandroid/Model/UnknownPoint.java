@@ -14,4 +14,11 @@ public class UnknownPoint {
     public double longitude;
     public Date dateCreation;
     public User idUserNavigation;
+
+    public UnknownPoint(long idUser, double latitude, double longitude, Date dateCreation) {
+        this.idUser = idUser;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.dateCreation = dateCreation;
+    }
 }

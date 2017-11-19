@@ -7,4 +7,13 @@
     <string name="menu_create_interest_point">Créer un nouveau point d\'intérêt</string>
     <string name="menu_create_unknown_point">Créer un nouveau point inconnu</string>
     <string name="menu_sign_out">Se déconnecter</string>
+    <string name="select_point">Sélectionnez un point</string>
+    <string name="button_submit">Confirmer</string>
+    <string name="title_registration">Inscription</string>
+    <string name="title_profile">Profil</string>
+    <string name="title_home_not_connected">Se connecter</string>
+    <string name="title_home_connected">Accueil</string>
+    <string name="title_create_unknown_point">Créer un point inconnu</string>
+    <string name="title_create_interest_point">Créer un point d\'intérêt</string>
+    <string name="title_create_description">Créer une description</string>
 </resources>

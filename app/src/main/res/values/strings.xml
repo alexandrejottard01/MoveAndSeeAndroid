@@ -13,4 +13,6 @@
     <string name="title_home_not_connected">Log in</string>
     <string name="title_profile">Profile</string>
     <string name="title_registration">Registration</string>
+    <string name="select_point">Select a point</string>
+    <string name="button_submit">To confirm</string>
 </resources>

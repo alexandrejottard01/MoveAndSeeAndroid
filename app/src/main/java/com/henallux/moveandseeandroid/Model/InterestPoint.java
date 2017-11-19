@@ -1,5 +1,8 @@
 package com.henallux.moveandseeandroid.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
