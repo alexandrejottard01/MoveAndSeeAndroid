@@ -21,4 +21,6 @@ public class UnknownPoint {
         this.longitude = longitude;
         this.dateCreation = dateCreation;
     }
+
+
 }

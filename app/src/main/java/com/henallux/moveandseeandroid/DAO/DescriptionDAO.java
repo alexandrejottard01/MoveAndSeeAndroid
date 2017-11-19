@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
+import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.User;
 
 import org.json.JSONArray;
@@ -26,74 +27,36 @@ import java.util.Date;
  */
 
 public class DescriptionDAO {
+    public ArrayList<DescriptionWithVote> getAllDescriptionsByInterestPoint(long idInterestPoint)throws Exception{
 
-    public ArrayList<DescriptionWithVote> getAllDescriptionsByInterestPoint(long id) throws Exception {
+        ArrayList<DescriptionWithVote> listDescription = new ArrayList<>();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
-        URL url = new URL("http://moveandsee.azurewebsites.net/api/Description/GetAllDescriptionsByInterestPoint/"+id);
-        URLConnection connection = url.openConnection();
-        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder sb = new StringBuilder();
-        String stringJson = "", line;
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/Description/GetAllDescriptionsByInterestPoint/" +idInterestPoint);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputJsonString = "",line;
+
+        while((line = bufferedReader.readLine()) != null){
+            stringBuilder.append(line);
         }
-        br.close();
-        stringJson = sb.toString();
+        bufferedReader.close();
+        connection.disconnect();
 
-        JSONArray jsonsArray=new JSONArray(stringJson);
-        ArrayList<DescriptionWithVote> listDescriptionWithVote=new ArrayList<>();
+        inputJsonString = stringBuilder.toString();
 
-        for(int i=0;i<jsonsArray.length();i++) {
+        JSONArray jsonArray = new JSONArray(inputJsonString);
 
-            JSONObject jsonDescription = jsonsArray.getJSONObject(i);
-            JSONObject description_object = jsonDescription.getJSONObject("description");
-
-            //remplissage de la description
-            long idDescription = description_object.getLong("idDescription");
-            String description_string = description_object.getString("explication");
-            int average = jsonDescription.getInt("moyenne");
-
-            JSONObject interestObject = description_object.getJSONObject("idInterestPointNavigation");
-
-            long idInterestPoint = interestObject.getLong("idInterestPoint");
-            long idUser = interestObject.getLong("idUser");
-            double latitude = interestObject.getDouble("latitude");
-            double longitude = interestObject.getDouble("longitude");
-            String name = interestObject.getString("name");
-            String dateFormat = interestObject.getString("dateCreation");
-            Date dateCreation;
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            dateCreation = format.parse(dateFormat);
-
-            JSONObject userObject = description_object.getJSONObject("idUserNavigation");
-
-            String pseudo = userObject.getString("pseudo");
-            String password = userObject.getString("password");
-            boolean isCertified = userObject.getBoolean("isCertified");
-            String nameCertified = userObject.getString("nameCertified");
-            String emailUser = userObject.getString("email");
-            String language = userObject.getString("language");
-            boolean isMale = userObject.getBoolean("isMale");
-            String birthDateFormat = userObject.getString("birthDate");
-            Date birthDate;
-            birthDate = format.parse(birthDateFormat);
-            boolean isAdmin = userObject.getBoolean("isAdmin");
-
-
-            User user = new User(idUser, pseudo, password, isCertified, nameCertified, emailUser, language, isMale, birthDate, isAdmin);
-
-            InterestPoint interestPoint = new InterestPoint(idInterestPoint, idUser, latitude, longitude, name, dateCreation, user);
-
-            Description description = new Description(idDescription, description_string, idUser, idInterestPoint, interestPoint, user);
-
-            DescriptionWithVote descriptionWithVote = new DescriptionWithVote(description, average);
-
-            listDescriptionWithVote.add(descriptionWithVote);
+        for (int i = 0; i<jsonArray.length();i++){
+            listDescription.add(gson.fromJson(jsonArray.getJSONObject(i).toString(),DescriptionWithVote.class));
         }
 
-        return listDescriptionWithVote;
+        return listDescription;
     }
-
 
     public int addDescription(Description description)throws Exception{
 
@@ -116,51 +79,4 @@ public class DescriptionDAO {
 
         return connection.getResponseCode();
     }
-
-
-
-
-    /*
-    public ArrayList<Description_interst_point> jsonToDescription(String stringJson) throws Exception{
-
-        ArrayList<Description_interst_point> listDescrip = new ArrayList<>();
-        Description_interst_point description;
-        JSONArray jsonsArray = new JSONArray(stringJson);
-
-        for (int i = 0; i < jsonsArray.length(); i++) {
-            JSONObject jsonDescription = jsonsArray.getJSONObject(i);
-            JSONObject description_object =jsonDescription.getJSONObject("description");
-            JSONObject jsonUser=description_object.getJSONObject("idUserNavigation");
-
-            //remplissage de la description
-            long id=description_object.getLong("idDescription");
-            String description_string=description_object.getString("explication");
-            long id_user=description_object.getLong("idUser");
-            long id_description=description_object.getLong("idInterestPoint");
-            double average=jsonDescription.getDouble("moyenne");
-
-            //remplissage du user pour la description
-            User user;
-            String pseudo=jsonUser.getString("pseudo");
-            String password=jsonUser.getString("password");
-            boolean is_certified=jsonUser.getBoolean("isCertified");
-            String name_certified=jsonUser.getString("nameCertified");
-            String mail=jsonUser.getString("email");
-            String langue=jsonUser.getString("language");
-            boolean is_male=jsonUser.getBoolean("isMale");
-            //Date birthday=(Date) jsonUser.get("birthDate");
-            boolean is_admin=jsonUser.getBoolean("isAdmin");
-
-            user=new User(id_user,pseudo,password,is_certified,is_admin,name_certified,is_male,null,mail,langue);
-
-            description=new Description_interst_point(id,description_string,id_user,user,id_description,average);
-
-            listDescrip.add(description);
-        }
-
-        return listDescrip;
-    }*/
-
-
-
 }

@@ -138,10 +138,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                 intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
 
                 startActivity(intentToCreateInterestPointActivity);
-                //Toast.makeText(getApplicationContext(), Double.toString(point.latitude), Toast.LENGTH_LONG).show();
-
-
-
             }
         });
     }
@@ -172,7 +168,13 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
 
         if(marker.getTitle() == null){ //Changer la condition pour détecter si c'est un point d'intéret ou point inconnu
-            Toast.makeText(this, "Point inconnu", Toast.LENGTH_LONG).show();
+            UnknownPoint unknownPoint = hashMapUnknownPoint.get(marker);
+
+            Gson gson = new Gson();
+            Intent intentCreateDescriptionOfUnknownPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfUnknownPointActivity.class);
+            intentCreateDescriptionOfUnknownPoint.putExtra("unknownPointSelected", gson.toJson(unknownPoint));
+
+            startActivity(intentCreateDescriptionOfUnknownPoint);
         }
         else{
             final InterestPointWithVote interestPointWithVote = hashMap.get(marker);

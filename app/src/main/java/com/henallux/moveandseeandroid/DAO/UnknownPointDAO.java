@@ -3,6 +3,7 @@ package com.henallux.moveandseeandroid.DAO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
+import com.henallux.moveandseeandroid.Model.InterestPoint;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
 
@@ -10,6 +11,7 @@ import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,7 +51,19 @@ public class UnknownPointDAO {
             listUnknownPoint.add(gson.fromJson(jsonArray.getJSONObject(i).toString(),UnknownPoint.class));
         }
 
-
         return listUnknownPoint;
+    }
+
+    public int deleteUnknownPoint(long idUnknownPoint)throws Exception{
+
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/UnknownPoint/DeleteUnknownPointById/"+idUnknownPoint);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.setDoInput(true);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
+        bufferedReader.close();
+        connection.disconnect();
+
+        return connection.getResponseCode();
     }
 }
