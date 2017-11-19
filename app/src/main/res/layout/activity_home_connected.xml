@@ -74,7 +74,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="0dp"/>
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/thumb_up"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -86,7 +86,7 @@
                 android:layout_marginTop="2dp"
                 android:background="@drawable/ic_thumb_up_black_24dp" />
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/thumb_down"
                 android:layout_width="20dp"
                 android:layout_height="20dp"

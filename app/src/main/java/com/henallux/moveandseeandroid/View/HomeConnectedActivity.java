@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +31,11 @@ import com.henallux.moveandseeandroid.Adapter.CustomListDescription;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.InterestPointDAO;
 import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
+import com.henallux.moveandseeandroid.DAO.VoteInterestPointDAO;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
+import com.henallux.moveandseeandroid.Model.VoteInterestPoint;
 import com.henallux.moveandseeandroid.R;
 
 import java.io.IOException;
@@ -62,6 +65,8 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
 
 
 
@@ -227,11 +232,31 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                     startActivity(intentToCreateDescriptionOfInterestPoint);
                 }
             });
+
+            //Gestion du pouce positive
+            ImageButton addVotePositive = (ImageButton) findViewById(R.id.thumb_up);
+            addVotePositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,1,interestPointWithVote.interestPoint.idInterestPoint);
+                    new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
+
+                }
+            });
+
+            //Gestion du pouce négatif
+            ImageButton addVoteNegative = (ImageButton) findViewById(R.id.thumb_down);
+            addVoteNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,1,interestPointWithVote.interestPoint.idInterestPoint);
+                    new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
+
+                }
+            });
         }
-
-
-
-
         return true;
     }
 
@@ -317,6 +342,34 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         protected void onPostExecute(ArrayList<DescriptionWithVote> listDescriptionAsync)
         {
             listDescription.setAdapter(new CustomListDescription(HomeConnectedActivity.this,listDescriptionAsync));
+        }
+    }
+
+    //Classe Async (VoteInterestPoint)
+    private class AddVoteInterestPointAsync extends AsyncTask<VoteInterestPoint,Void,Integer>
+    {
+        @Override
+        protected Integer doInBackground(VoteInterestPoint... params) {
+            Integer resultCode =0;
+            VoteInterestPointDAO voteInterestPointDAO=new VoteInterestPointDAO();
+
+            try{
+                resultCode = voteInterestPointDAO.addVoteInterestPoint(params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return resultCode;
+        }
+
+        @Override
+        protected void onPostExecute(Integer resultCode)
+        {
+            if(resultCode == HttpURLConnection.HTTP_OK){
+                Toast.makeText(getApplicationContext(), "Vote enregistré", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Vote non enregistré", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

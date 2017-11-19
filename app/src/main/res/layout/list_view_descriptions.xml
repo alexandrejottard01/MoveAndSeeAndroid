@@ -33,7 +33,7 @@
         android:text="TextView"
         android:textColor="#000" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/thumb_up"
         android:layout_width="20dp"
         android:layout_height="20dp"
@@ -41,7 +41,7 @@
         android:layout_below="@+id/rate"
         android:background="@drawable/ic_thumb_up_black_24dp" />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/thumb_down"
         android:layout_width="20dp"
         android:layout_height="20dp"

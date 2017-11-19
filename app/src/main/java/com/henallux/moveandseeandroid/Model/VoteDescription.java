@@ -11,4 +11,10 @@ public class VoteDescription {
     public long idDescription;
     public Description idDescriptionNavigation;
     public User idUserNavigation;
+
+    public VoteDescription(boolean isPositiveAssessment, long idUser, long idDescription) {
+        this.isPositiveAssessment = isPositiveAssessment;
+        this.idUser = idUser;
+        this.idDescription = idDescription;
+    }
 }

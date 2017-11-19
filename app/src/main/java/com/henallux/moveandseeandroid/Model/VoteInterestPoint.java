@@ -11,4 +11,12 @@ public class VoteInterestPoint {
     public long idInterestPoint;
     public InterestPoint idInterestPointNavigation;
     public User idUserNavigation;
+
+    public VoteInterestPoint(boolean isPositiveAssessment, long idUser, long idInterestPoint) {
+        this.isPositiveAssessment = isPositiveAssessment;
+        this.idUser = idUser;
+        this.idInterestPoint = idInterestPoint;
+    }
 }
+
+

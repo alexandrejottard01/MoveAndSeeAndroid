@@ -36,13 +36,6 @@ public class Description {
         this.idInterestPoint = idInterestPoint;
     }
 
-    public Description(String explication, long idUser, long idInterestPoint, InterestPoint idInterestPointNavigation) {
-        this.explication = explication;
-        this.idUser = idUser;
-        this.idInterestPoint = idInterestPoint;
-        this.idInterestPointNavigation = idInterestPointNavigation;
-    }
-
     public Description(String explication, long idUser, InterestPoint idInterestPointNavigation) {
         this.explication = explication;
         this.idUser = idUser;
