@@ -28,4 +28,12 @@ public class InterestPoint {
         this.dateCreation = dateCreation;
         this.idUserNavigation = idUserNavigation;
     }
+
+    public InterestPoint(long idUser, double latitude, double longitude, String name, Date dateCreation) {
+        this.idUser = idUser;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.dateCreation = dateCreation;
+    }
 }

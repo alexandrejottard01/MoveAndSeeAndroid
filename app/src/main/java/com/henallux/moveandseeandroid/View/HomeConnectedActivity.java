@@ -29,8 +29,10 @@ import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.Adapter.CustomListDescription;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.InterestPointDAO;
+import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
+import com.henallux.moveandseeandroid.Model.UnknownPoint;
 import com.henallux.moveandseeandroid.R;
 
 import java.io.IOException;
@@ -48,6 +50,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     //Variable d'instance
     private GoogleMap map;
     HashMap<Marker, InterestPointWithVote> hashMap = new HashMap<Marker, InterestPointWithVote>();
+    HashMap<Marker, UnknownPoint> hashMapUnknownPoint = new HashMap<Marker, UnknownPoint>();
     private ListView listDescription;
 
     //OnCreate
@@ -59,6 +62,9 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+
     }
 
     //App Bar
@@ -106,11 +112,38 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             e.printStackTrace();
         }
 
+        //Affichage des UnknownPoints sur la map
+        try {
+            new GetAllUnknownPointsAsync().execute();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
         googleMap.setOnMarkerClickListener(this);
 
         goToLocationZoom(50.469424, 4.862533, 15);
+
+        //Evenement quand on clique sur la map
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+            @Override
+            public void onMapClick(LatLng point) {
+
+                LatLng latitudeLongitude = new LatLng(point.latitude, point.longitude);
+
+                Gson gson = new Gson();
+                Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
+                intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
+
+                startActivity(intentToCreateInterestPointActivity);
+                //Toast.makeText(getApplicationContext(), Double.toString(point.latitude), Toast.LENGTH_LONG).show();
+
+
+
+            }
+        });
     }
 
     private void goToLocationZoom(double latitude, double longitude, float zoom) {
@@ -119,6 +152,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         map.moveCamera(update);
     }
 
+    //C'est quoi cette méthode ?
     //Méthode pour récupérer la sellection de lieu par l'utilisateur
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -134,79 +168,67 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
-        final InterestPointWithVote interestPointWithVote = hashMap.get(marker);
 
-        //Nom du InterestPoint
-        TextView nameInterest = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.name_interest);
-        nameInterest.setText(interestPointWithVote.interestPoint.name);
 
-        //Adresse du InterestPoint
-        Geocoder geocoder = new Geocoder(this);
-        List<Address> listAddress = null;
-        try {
-            listAddress = geocoder.getFromLocation(interestPointWithVote.interestPoint.latitude, interestPointWithVote.interestPoint.longitude,1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        Address addressInterestPoint = listAddress.get(0);
-        String stringAddress = addressInterestPoint.getAddressLine(0) + " " + addressInterestPoint.getAddressLine(1);
 
-        TextView address = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.address_interest);
-        nameInterest.setText(stringAddress);
-
-        //Moyenne du InterestPoint
-        TextView vote = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.average_interest);
-
-        if(interestPointWithVote.moyenne == -1){
-            nameInterest.setText("0 vote");
+        if(marker.getTitle() == null){ //Changer la condition pour détecter si c'est un point d'intéret ou point inconnu
+            Toast.makeText(this, "Point inconnu", Toast.LENGTH_LONG).show();
         }
         else{
-            nameInterest.setText(Integer.toString(interestPointWithVote.moyenne) + " %");
+            final InterestPointWithVote interestPointWithVote = hashMap.get(marker);
+
+            //Nom du InterestPoint
+            TextView nameInterest = new TextView(this);
+            nameInterest =(TextView)findViewById(R.id.name_interest);
+            nameInterest.setText(interestPointWithVote.interestPoint.name);
+
+            //Adresse du InterestPoint
+            Geocoder geocoder = new Geocoder(this);
+            List<Address> listAddress = null;
+            try {
+                listAddress = geocoder.getFromLocation(interestPointWithVote.interestPoint.latitude, interestPointWithVote.interestPoint.longitude,1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Address addressInterestPoint = listAddress.get(0);
+            String stringAddress = addressInterestPoint.getAddressLine(0) + " " + addressInterestPoint.getAddressLine(1);
+
+            TextView address = new TextView(this);
+            nameInterest =(TextView)findViewById(R.id.address_interest);
+            nameInterest.setText(stringAddress);
+
+            //Moyenne du InterestPoint
+            TextView vote = new TextView(this);
+            nameInterest =(TextView)findViewById(R.id.average_interest);
+
+            if(interestPointWithVote.moyenne == -1){
+                nameInterest.setText("0 vote");
+            }
+            else{
+                nameInterest.setText(Integer.toString(interestPointWithVote.moyenne) + "%");
+            }
+
+            //Descriptions du InterestPoint + execute DescriptionAsync
+            listDescription = (ListView) findViewById(R.id.list_description);
+            new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
+
+            //Gestion du boutton addDescription
+            Button addDescription = (Button) findViewById(R.id.button_add_description);
+            addDescription.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Gson gson = new Gson();
+                    Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
+                    intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
+
+                    startActivity(intentToCreateDescriptionOfInterestPoint);
+                }
+            });
         }
 
-        //Descriptions du InterestPoint
-        listDescription = (ListView) findViewById(R.id.list_description);
-        new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
 
-        //Gestion du boutton addDescription
-        Button addDescription = (Button) findViewById(R.id.button_add_description);
-        addDescription.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Gson gson = new Gson();
-                Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
-                intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
-
-                startActivity(intentToCreateDescriptionOfInterestPoint);
-            }
-        });
-
-        //Evenement quand on clique sur la map
-        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-
-            @Override
-            public void onMapClick(LatLng point) {
-                // TODO Auto-generated method stub
-                /*lstLatLngs.add(point);
-                map.clear();
-                map.addMarker(new MarkerOptions().position(point));
-                String test= Double.toString( point.latitude);
-                Toast.makeText(getApplicationContext(), test, Toast.LENGTH_SHORT).show();*/
-
-                LatLng latitudeLongitude = new LatLng(point.latitude, point.longitude);
-
-                Gson gson = new Gson();
-                Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
-                intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
-
-                startActivity(intentToCreateInterestPointActivity);
-
-            }
-        });
 
         return true;
     }
@@ -215,8 +237,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     //Classe Async (InterestPoint)
     private class GetAllInterestPointsAsync extends AsyncTask<String,Void,ArrayList<InterestPointWithVote>>
     {
-        int statut= HttpURLConnection.HTTP_OK;
-
         @Override
         protected ArrayList<InterestPointWithVote> doInBackground(String... params)
         {
@@ -246,10 +266,39 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    //Classe Async (UnknownPoint)
+    private class GetAllUnknownPointsAsync extends AsyncTask<String,Void,ArrayList<UnknownPoint>>
+    {
+        @Override
+        protected ArrayList<UnknownPoint> doInBackground(String... params)
+        {
+            ArrayList<UnknownPoint> listUnknownPoints = new ArrayList<>();
+            UnknownPointDAO unknownPointDAO=new UnknownPointDAO();
+            try{
+                listUnknownPoints=unknownPointDAO.getAllUnknownPoint();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return listUnknownPoints;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<UnknownPoint> listUnknownPoints)
+        {
+            for (UnknownPoint item : listUnknownPoints) {
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(item.latitude, item.longitude))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+                hashMapUnknownPoint.put(marker, item);
+            }
+        }
+    }
+
     //Classe Async (Description)
     private class GetAllDescriptionByInterestPointAsync extends AsyncTask<InterestPointWithVote,Void,ArrayList<DescriptionWithVote>>
     {
-        //int statut= HttpURLConnection.HTTP_OK;
         @Override
         protected ArrayList<DescriptionWithVote> doInBackground(InterestPointWithVote... params) {
             DescriptionDAO descriptionDao=new DescriptionDAO();

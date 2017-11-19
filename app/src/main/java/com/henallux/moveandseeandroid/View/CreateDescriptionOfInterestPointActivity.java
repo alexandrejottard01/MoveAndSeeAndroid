@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,17 +21,15 @@ import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
-import com.henallux.moveandseeandroid.DAO.InterestPointDAO;
+import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.R;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
 
         //Nom du InterestPoint
         TextView nameInterest = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.name_interest_with_average);
+        nameInterest =(TextView)findViewById(R.id.name_interest_point);
 
         //Moyenne du InterestPoint
         if(interestPointWithVote.moyenne == -1){
@@ -90,10 +89,18 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         addDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            Toast.makeText(getApplicationContext(), interestPointWithVote.interestPoint.name, Toast.LENGTH_SHORT).show();
+            EditText explicationEditText = (EditText) findViewById (R.id.explication_interest);
+            String explication = explicationEditText.getText().toString();
+
+            long idInterestPoint = interestPointWithVote.interestPoint.idInterestPoint;
+            Description description = new Description(explication,1,idInterestPoint);
+
+            new AddDecriptionAsync().execute(description);
 
             }
         });
+
+
 
 
     }
@@ -163,37 +170,36 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         map.moveCamera(update);
     }
 
-    /*private class CreateDecription extends AsyncTask<String,Void,int>
+    //Classe AddDescriptionAsync
+    private class AddDecriptionAsync extends AsyncTask<Description,Void,Integer>
     {
-        int statut= HttpURLConnection.HTTP_OK;
-
         @Override
-        protected int doInBackground(String... params)
+        protected Integer doInBackground(Description... params)
         {
-            int resultCode;
+            Integer resultCode =0;
             DescriptionDAO descriptionDAO=new DescriptionDAO();
             try{
-                resultCode=interestPointDAO.getAllInterestPoint();
+                resultCode=descriptionDAO.addDescription(params[0]);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
-            return listInterestPoints;
+            return resultCode;
         }
 
         @Override
-        protected void onPostExecute(ArrayList<InterestPointWithVote> listInterestPoints)
+        protected void onPostExecute(Integer resultCode)
         {
-            for (InterestPointWithVote item : listInterestPoints) {
-                Marker marker = map.addMarker(new MarkerOptions()
-                        .position(new LatLng(item.interestPoint.latitude, item.interestPoint.longitude))
-                        .title(item.interestPoint.name)
-                        .snippet(Integer.toString(item.moyenne))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
-                hashMap.put(marker, item);
+            if(resultCode == HttpURLConnection.HTTP_OK){
+                Toast.makeText(getApplicationContext(), R.string.message_description_create, Toast.LENGTH_SHORT).show();
+                Intent goToHomeConnected = new Intent(CreateDescriptionOfInterestPointActivity.this, HomeConnectedActivity.class);
+                startActivity(goToHomeConnected);
             }
+            else{
+                Toast.makeText(getApplicationContext(), R.string.message_errer_description_no_create, Toast.LENGTH_SHORT).show();
+            }
+
         }
-    }*/
+    }
 }
 

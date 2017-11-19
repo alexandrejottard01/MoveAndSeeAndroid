@@ -16,4 +16,7 @@
     <string name="title_create_unknown_point">Créer un point inconnu</string>
     <string name="title_create_interest_point">Créer un point d\'intérêt</string>
     <string name="title_create_description">Créer une description</string>
+    <string name="message_errer_description_no_create">Erreur lors de la création de la description</string>
+    <string name="message_description_create">Description créée</string>
+    <string name="new_interest_point">Nouveau point d\'intérêt</string>
 </resources>

@@ -22,6 +22,33 @@ public class Description {
         this.idUserNavigation = idUserNavigation;
     }
 
+    public Description(String explication, long idUser, long idInterestPoint, InterestPoint idInterestPointNavigation, User idUserNavigation) {
+        this.explication = explication;
+        this.idUser = idUser;
+        this.idInterestPoint = idInterestPoint;
+        this.idInterestPointNavigation = idInterestPointNavigation;
+        this.idUserNavigation = idUserNavigation;
+    }
+
+    public Description(String explication, long idUser, long idInterestPoint) {
+        this.explication = explication;
+        this.idUser = idUser;
+        this.idInterestPoint = idInterestPoint;
+    }
+
+    public Description(String explication, long idUser, long idInterestPoint, InterestPoint idInterestPointNavigation) {
+        this.explication = explication;
+        this.idUser = idUser;
+        this.idInterestPoint = idInterestPoint;
+        this.idInterestPointNavigation = idInterestPointNavigation;
+    }
+
+    public Description(String explication, long idUser, InterestPoint idInterestPointNavigation) {
+        this.explication = explication;
+        this.idUser = idUser;
+        this.idInterestPointNavigation = idInterestPointNavigation;
+    }
+
     public long getIdDescription() {
         return idDescription;
     }

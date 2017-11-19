@@ -9,4 +9,47 @@
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/name_interest_point"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="Nom de l'intérêt"
+            android:inputType="textPersonName"
+            android:paddingBottom="5dp"
+            android:textColorLink="@color/cast_expanded_controller_background_color" />
+
+
+        <EditText
+            android:id="@+id/explication_interest"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_below="@+id/name_interest_point"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_add_description"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Description de l'intérêt"
+            android:inputType="textMultiLine"
+            android:textColorLink="@color/cast_expanded_controller_background_color" />
+
+        <Button
+            android:id="@+id/button_submit_interest_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/explication_interest"
+            android:layout_centerHorizontal="true"
+            android:text="@string/button_submit" />
+
+
+    </RelativeLayout>
 </LinearLayout>

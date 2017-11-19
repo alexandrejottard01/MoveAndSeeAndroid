@@ -1,6 +1,7 @@
 package com.henallux.moveandseeandroid.DAO;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
@@ -94,65 +95,32 @@ public class DescriptionDAO {
     }
 
 
+    public int addDescription(Description description)throws Exception{
 
+        Gson gson = new GsonBuilder().create();
+        String outputJsonString = gson.toJson(description);
 
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/Description/AddDescription");
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
-    /*public int AddDescription(Description description) throws Exception
-    {
-        URL url=new URL("http://moveandsee.azurewebsites.net/api/Description/AddDescription");
-        HttpURLConnection connection=(HttpURLConnection)url.openConnection();
         connection.setRequestMethod("POST");
-        //connection.setDoInput(true); //on va devoir ecrire
-        connection.setDoOutput(true); //on lui dis  si on recuperer qq chose
+        connection.setDoInput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
 
-        connection.setRequestProperty("Content-Type","application/json");// on lui donne le type de donee envoye
-        Gson gson=new Gson();
-        String description_output=gson.toJson(description);
-
-        //byte [] output_byte=description_output.getBytes("UTF-8"); // on doit convertir en byte
-        OutputStream stream_out=connection.getOutputStream();
-        OutputStreamWriter writter=new OutputStreamWriter(stream_out);
-        connection.connect();
-        writter.write(description_output);
-        writter.flush();
-
-        stream_out.write(output_byte);
-        stream_out.flush();
-        stream_out.close();
-
-        int statut=connection.getResponseCode();
-
-        writter.close();
-        stream_out.close();
-        connection.disconnect();
-
-        if(statut!=HttpURLConnection.HTTP_OK)
-        {
-            throw new Exception();
-        }
+        byte[] outputBytes = outputJsonString.getBytes("UTF-8");
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(outputBytes); //Execution du post
+        outputStream.flush();
+        outputStream.close();
 
 
-
-        URLConnection connection=url.openConnection();
-        BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuilder sb=new StringBuilder();
-        String stringJson="",line;
-        while ((line=br.readLine())!=null){
-            sb.append(line);
-        }
-        br.close();
-        stringJson=sb.toString();
-
-        return statut;
-
-    }*/
-
-    /*
-    public Description_interst_point objectToJson()
-    {
-
+        return connection.getResponseCode();
     }
 
+
+
+
+    /*
     public ArrayList<Description_interst_point> jsonToDescription(String stringJson) throws Exception{
 
         ArrayList<Description_interst_point> listDescrip = new ArrayList<>();
