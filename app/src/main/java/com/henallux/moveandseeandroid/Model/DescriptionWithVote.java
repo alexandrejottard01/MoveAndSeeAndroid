@@ -7,11 +7,11 @@ package com.henallux.moveandseeandroid.Model;
 public class DescriptionWithVote {
 
     public Description description;
-    public int moyenne;
+    public int average;
 
-    public DescriptionWithVote(Description description, int moyenne) {
+    public DescriptionWithVote(Description description, int average) {
         this.description = description;
-        this.moyenne = moyenne;
+        this.average = average;
     }
 
     public Description getDescription() {
@@ -22,12 +22,12 @@ public class DescriptionWithVote {
         this.description = description;
     }
 
-    public int getMoyenne() {
-        return moyenne;
+    public int getAverage() {
+        return average;
     }
 
-    public void setMoyenne(int moyenne) {
-        this.moyenne = moyenne;
+    public void setAverage(int average) {
+        this.average = average;
     }
 }
 

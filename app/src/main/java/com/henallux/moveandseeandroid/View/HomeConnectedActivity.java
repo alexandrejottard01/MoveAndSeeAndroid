@@ -193,7 +193,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                 e.printStackTrace();
             }
             Address addressInterestPoint = listAddress.get(0);
-            String stringAddress = addressInterestPoint.getAddressLine(0) + " " + addressInterestPoint.getAddressLine(1);
+            String stringAddress = addressInterestPoint.getAddressLine(0);
 
             TextView address = new TextView(this);
             nameInterest =(TextView)findViewById(R.id.address_interest);
@@ -203,11 +203,11 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             TextView vote = new TextView(this);
             nameInterest =(TextView)findViewById(R.id.average_interest);
 
-            if(interestPointWithVote.moyenne == -1){
-                nameInterest.setText("0 vote");
+            if(interestPointWithVote.average != -1) {
+                nameInterest.setText(Integer.toString(interestPointWithVote.average) + "%");
             }
             else{
-                nameInterest.setText(Integer.toString(interestPointWithVote.moyenne) + "%");
+                nameInterest.setText(" ");
             }
 
             //Descriptions du InterestPoint + execute DescriptionAsync
@@ -280,7 +280,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                 Marker marker = map.addMarker(new MarkerOptions()
                         .position(new LatLng(item.interestPoint.latitude, item.interestPoint.longitude))
                         .title(item.interestPoint.name)
-                        .snippet(Integer.toString(item.moyenne))
+                        .snippet(Integer.toString(item.average))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
                 hashMap.put(marker, item);

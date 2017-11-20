@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MoveAndSee</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">Move And See</string>
     <string name="menu_home">Home</string>
     <string name="menu_profile">Profile</string>
     <string name="menu_create_interest_point">Create a new point of interest</string>

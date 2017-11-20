@@ -62,11 +62,11 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         nameInterest =(TextView)findViewById(R.id.name_interest_point);
 
         //Moyenne du InterestPoint
-        if(interestPointWithVote.moyenne == -1){
-            nameInterest.setText(interestPointWithVote.interestPoint.name);
+        if(interestPointWithVote.average != -1){
+            nameInterest.setText(interestPointWithVote.interestPoint.name + " " + Integer.toString(interestPointWithVote.average)+"%");
         }
         else{
-            nameInterest.setText(interestPointWithVote.interestPoint.name + " " + Integer.toString(interestPointWithVote.moyenne)+"%");
+            nameInterest.setText(interestPointWithVote.interestPoint.name);
         }
 
         //Adresse du InterestPoint
@@ -78,7 +78,7 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
             e.printStackTrace();
         }
         Address addressInterestPoint = listAddress.get(0);
-        String stringAddress = addressInterestPoint.getAddressLine(0) + " " + addressInterestPoint.getAddressLine(1);
+        String stringAddress = addressInterestPoint.getAddressLine(0);
 
         TextView address = new TextView(this);
         nameInterest =(TextView)findViewById(R.id.address_interest);
@@ -155,7 +155,7 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         map.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude,longitude))
                 .title(interestPointWithVote.interestPoint.name)
-                .snippet(Integer.toString(interestPointWithVote.moyenne))
+                .snippet(Integer.toString(interestPointWithVote.average))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
 

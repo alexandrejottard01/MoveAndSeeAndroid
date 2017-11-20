@@ -55,7 +55,10 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
 
             textPseudo.setText(descriptionWithVote.description.idUserNavigation.pseudo);
             textExplication.setText(descriptionWithVote.description.explication);
-            textAverage.setText(Integer.toString(descriptionWithVote.moyenne) +"%");
+
+            if(descriptionWithVote.average != -1){
+                textAverage.setText(Integer.toString(descriptionWithVote.average) +"%");
+            }
 
 
         //Gestion du pouce positive

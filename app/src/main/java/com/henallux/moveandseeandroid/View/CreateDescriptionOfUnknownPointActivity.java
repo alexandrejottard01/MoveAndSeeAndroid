@@ -149,7 +149,7 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
     }
 
     //Classe DeleteUnknownPointAsync
-    private class DeleteUnknownPointAsync extends AsyncTask<Description,Void,Integer>
+    /*private class DeleteUnknownPointAsync extends AsyncTask<Description,Void,Integer>
     {
         @Override
         protected Integer doInBackground(Description... params)
@@ -169,6 +169,49 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
 
                 try{
                     resultCode=descriptionDAO.addDescription(params[0]);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return resultCode;
+        }
+
+        @Override
+        protected void onPostExecute(Integer resultCode)
+        {
+            if(resultCode == HttpURLConnection.HTTP_OK){
+                Toast.makeText(getApplicationContext(), R.string.interest_point_create, Toast.LENGTH_SHORT).show();
+                Intent goToHomeConnected = new Intent(CreateDescriptionOfUnknownPointActivity.this, HomeConnectedActivity.class);
+                startActivity(goToHomeConnected);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Erreur de création du point d'intérêt", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }*/
+
+    private class DeleteUnknownPointAsync extends AsyncTask<Description,Void,Integer> //Si la supression fonctionne pas, l'ajout du point d'intéret est quand meme fait
+    {
+        @Override
+        protected Integer doInBackground(Description... params)
+        {
+            Integer resultCode =0;
+            DescriptionDAO descriptionDAO = new DescriptionDAO();
+
+            try{
+                resultCode=descriptionDAO.addDescription(params[0]);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(resultCode == 200){
+                UnknownPointDAO unknownPointDAO = new UnknownPointDAO();
+
+                try{
+                    resultCode=unknownPointDAO.deleteUnknownPoint(unknownPoint.idUnknownPoint);
                 }
                 catch (Exception e) {
                     e.printStackTrace();

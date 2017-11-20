@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">MoveAndSee</string>
     <string name="menu_home">Accueil</string>
-    <string name="title_activity_maps">Carte</string>
+    <string name="title_activity_maps">Move And See</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_create_interest_point">Créer un nouveau point d\'intérêt</string>
     <string name="menu_create_unknown_point">Créer un nouveau point inconnu</string>

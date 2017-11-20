@@ -10,10 +10,26 @@ import android.os.Parcelable;
 public class InterestPointWithVote {
 
     public InterestPoint interestPoint;
-    public int moyenne;
+    public int average;
 
-    public InterestPointWithVote(InterestPoint interestPoint, int moyenne) {
+    public InterestPointWithVote(InterestPoint interestPoint, int average) {
         this.interestPoint = interestPoint;
-        this.moyenne = moyenne;
+        this.average = average;
+    }
+
+    public InterestPoint getInterestPoint() {
+        return interestPoint;
+    }
+
+    public void setInterestPoint(InterestPoint interestPoint) {
+        this.interestPoint = interestPoint;
+    }
+
+    public int getAverage() {
+        return average;
+    }
+
+    public void setAverage(int average) {
+        this.average = average;
     }
 }
