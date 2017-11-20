@@ -9,4 +9,36 @@
         android:layout_width="match_parent"
         android:layout_height="200dp" />
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/latitude_longitude_unknown_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:inputType="textPersonName"
+            android:paddingBottom="5dp"
+            android:text="@string/press_map_to_create_point"
+            android:textColorLink="@color/cast_expanded_controller_background_color" />
+
+
+        <Button
+            android:id="@+id/button_submit_unknown_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/explication_interest"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="20dp"
+            android:text="@string/button_submit" />
+
+    </RelativeLayout>
+
 </LinearLayout>

@@ -182,7 +182,7 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
         protected void onPostExecute(Integer resultCode)
         {
             if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), "Point d'intérêt créé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.interest_point_create, Toast.LENGTH_SHORT).show();
                 Intent goToHomeConnected = new Intent(CreateDescriptionOfUnknownPointActivity.this, HomeConnectedActivity.class);
                 startActivity(goToHomeConnected);
             }

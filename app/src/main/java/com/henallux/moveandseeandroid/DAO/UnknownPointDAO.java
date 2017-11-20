@@ -66,4 +66,26 @@ public class UnknownPointDAO {
 
         return connection.getResponseCode();
     }
+
+    public int addUnknownPoint(UnknownPoint unknownPoint)throws Exception{
+
+        Gson gson = new GsonBuilder().create();
+        String outputJsonString = gson.toJson(unknownPoint);
+
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/UnknownPoint/AddUnknownPoint");
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+
+        connection.setRequestMethod("POST");
+        connection.setDoInput(true);
+        connection.setRequestProperty("Content-Type", "application/json");
+
+        byte[] outputBytes = outputJsonString.getBytes("UTF-8");
+        OutputStream outputStream = connection.getOutputStream();
+        outputStream.write(outputBytes); //Execution du post
+        outputStream.flush();
+        outputStream.close();
+
+
+        return connection.getResponseCode();
+    }
 }

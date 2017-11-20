@@ -19,4 +19,6 @@
     <string name="message_errer_description_no_create">Erreur lors de la création de la description</string>
     <string name="message_description_create">Description créée</string>
     <string name="new_interest_point">Nouveau point d\'intérêt</string>
+    <string name="press_map_to_create_point">Veuillez appuyer sur la map afin de créer un point</string>
+    <string name="interest_point_create">Point d\'intérêt créé</string>
 </resources>

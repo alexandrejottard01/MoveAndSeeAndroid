@@ -42,14 +42,14 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
     @NonNull
     @Override
     public View getView(int position, @NonNull View view, @NonNull ViewGroup viewGroup){
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            final View viewDescription = layoutInflater.inflate(R.layout.list_view_descriptions, viewGroup, false);
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        final View viewDescription = layoutInflater.inflate(R.layout.list_view_descriptions, viewGroup, false);
 
-            final DescriptionWithVote descriptionWithVote = getItem(position);
+        final DescriptionWithVote descriptionWithVote = getItem(position);
 
-            TextView textPseudo = (TextView) viewDescription.findViewById(R.id.title_pseudo_interest_point);
-            TextView textExplication = (TextView) viewDescription.findViewById(R.id.description);
-            TextView textAverage = (TextView) viewDescription.findViewById(R.id.rate);
+        TextView textPseudo = (TextView) viewDescription.findViewById(R.id.title_pseudo_interest_point);
+        TextView textExplication = (TextView) viewDescription.findViewById(R.id.description);
+        TextView textAverage = (TextView) viewDescription.findViewById(R.id.rate);
 
 
 
@@ -57,26 +57,6 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             textExplication.setText(descriptionWithVote.description.explication);
             textAverage.setText(Integer.toString(descriptionWithVote.moyenne) +"%");
 
-
-            /*//Evènement pouce vert
-            ImageView btn_thumb_up=(ImageView) viewDescription.findViewById(R.id.thumb_up);
-
-            btn_thumb_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(viewDescription.getContext(), "ok !", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            //Evènement pouce rouge
-            ImageView btn_thumb_down=(ImageView) viewDescription.findViewById(R.id.thumb_down);
-
-            btn_thumb_down.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(viewDescription.getContext(), "ok !", Toast.LENGTH_SHORT).show();
-                }
-            });*/
 
         //Gestion du pouce positive
         ImageButton addVotePositive = (ImageButton) viewDescription.findViewById(R.id.thumb_up);
@@ -100,18 +80,7 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             }
         });
 
-        /*//Gestion du pouce négatif
-        ImageButton addVoteNegative = (ImageButton) viewDescription.findViewById(R.id.thumb_down);
-        addVoteNegative.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,1,interestPointWithVote.interestPoint.idInterestPoint);
-            new HomeConnectedActivity.AddVoteInterestPointAsync().execute(voteInterestPointNegative);
-            }
-        });*/
-
-            return viewDescription;
+        return viewDescription;
 
     }
 

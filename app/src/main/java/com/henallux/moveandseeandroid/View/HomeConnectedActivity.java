@@ -65,11 +65,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
-
-
     }
 
     //App Bar
@@ -165,7 +160,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     }
 
-    //Evenement Clique sur map
+    //Evenement Clique sur Marker
     @Override
     public boolean onMarkerClick(final Marker marker) {
 
@@ -219,7 +214,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             listDescription = (ListView) findViewById(R.id.list_description);
             new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
 
-            //Gestion du boutton addDescription
+            //Gestion du bouton addDescription
             Button addDescription = (Button) findViewById(R.id.button_add_description);
             addDescription.setOnClickListener(new View.OnClickListener() {
                 @Override

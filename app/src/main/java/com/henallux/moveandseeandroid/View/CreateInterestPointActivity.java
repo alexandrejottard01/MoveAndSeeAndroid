@@ -70,9 +70,9 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
                 double latitude = latitudeLongitudeSelected.latitude;
                 double longitude = latitudeLongitudeSelected.longitude;
 
-                Date date = Calendar.getInstance().getTime();
+                Date dateCreation = Calendar.getInstance().getTime();
 
-                InterestPoint interestPoint = new InterestPoint(1,latitude,longitude,nameInterestPoint, date);
+                InterestPoint interestPoint = new InterestPoint(1,latitude,longitude,nameInterestPoint, dateCreation);
 
                 //Création de Description
                 EditText descriptionInterestPointEditText = (EditText) findViewById (R.id.explication_interest);
