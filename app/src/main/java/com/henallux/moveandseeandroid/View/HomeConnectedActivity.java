@@ -1,11 +1,16 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -62,7 +67,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     //OnCreate
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_connected);
         setTitle(getString(R.string.title_home_connected));
@@ -71,36 +76,38 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         mapFragment.getMapAsync(this);
 
         if (!googleServicesAvailable()) {
-            Toast.makeText(this, "Le service Google Map ne fonctionne pas", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.message_service_unavailable_google_map, Toast.LENGTH_LONG).show();
         }
+
+        manageNonAuthorizationLocation();
     }
 
     //App Bar
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch(item.getItemId()){
-            case R.id.action_profile :
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_profile:
                 Intent goToProfile = new Intent(HomeConnectedActivity.this, ProfileActivity.class);
                 startActivity(goToProfile);
                 return true;
 
-            case R.id.action_create_interest_point :
+            case R.id.action_create_interest_point:
                 Intent goToCreateInterestPoint = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
                 startActivity(goToCreateInterestPoint);
                 return true;
 
-            case R.id.action_create_unknown_point :
+            case R.id.action_create_unknown_point:
                 Intent goToCreateUnknownPoint = new Intent(HomeConnectedActivity.this, CreateUnknownPointActivity.class);
                 startActivity(goToCreateUnknownPoint);
                 return true;
 
-            case R.id.action_sign_out :
+            case R.id.action_sign_out:
                 Intent goToHomeNotConnected = new Intent(HomeConnectedActivity.this, HomeNotConnectedActivity.class);
                 startActivity(goToHomeNotConnected);
                 return true;
@@ -125,13 +132,12 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             @Override
             public void onMapClick(LatLng point) {
                 LatLng latitudeLongitude = new LatLng(point.latitude, point.longitude);
-                Gson gson = new Gson();
-                Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
-                intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
-                startActivity(intentToCreateInterestPointActivity);
+                goToCreateInterestPointActivity(latitudeLongitude);
             }
         });
     }
+
+
 
     private void displayInterestPoints(){
         try {
@@ -172,11 +178,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     public boolean onMarkerClick(final Marker marker) {
         if(marker.getTitle() == null){ //Changer la condition pour détecter si c'est un point d'intéret ou point inconnu
             UnknownPoint unknownPoint = hashMapUnknownPoint.get(marker);
-
-            Gson gson = new Gson();
-            Intent intentCreateDescriptionOfUnknownPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfUnknownPointActivity.class);
-            intentCreateDescriptionOfUnknownPoint.putExtra("unknownPointSelected", gson.toJson(unknownPoint));
-            startActivity(intentCreateDescriptionOfUnknownPoint);
+            goToCreateDescriptionOfUnknownPointActivity(unknownPoint);
         }
         else{
             final InterestPointWithVote interestPointWithVote = hashMap.get(marker);
@@ -188,10 +190,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
                 @Override
                 public void onClick(View v) {
-                    Gson gson = new Gson();
-                    Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
-                    intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
-                    startActivity(intentToCreateDescriptionOfInterestPoint);
+                    goToCreateDescriptionOfInterestPointActivity(interestPointWithVote);
                 }
             });
 
@@ -218,6 +217,27 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             });
         }
         return true;
+    }
+
+    private void goToCreateDescriptionOfInterestPointActivity(InterestPointWithVote interestPointWithVote){
+        Gson gson = new Gson();
+        Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
+        intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
+        startActivity(intentToCreateDescriptionOfInterestPoint);
+    }
+
+    private void goToCreateDescriptionOfUnknownPointActivity(UnknownPoint unknownPoint){
+        Gson gson = new Gson();
+        Intent intentCreateDescriptionOfUnknownPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfUnknownPointActivity.class);
+        intentCreateDescriptionOfUnknownPoint.putExtra("unknownPointSelected", gson.toJson(unknownPoint));
+        startActivity(intentCreateDescriptionOfUnknownPoint);
+    }
+
+    private void goToCreateInterestPointActivity(LatLng latitudeLongitude){
+        Gson gson = new Gson();
+        Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
+        intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
+        startActivity(intentToCreateInterestPointActivity);
     }
 
     private void fillInterestPointInLayout(InterestPointWithVote interestPointWithVote){
@@ -272,19 +292,17 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
     }
 
-    public boolean googleServicesAvailable() { //Méthode pour savoir si le service Google Map est disponible (méthode toute faite) (A refactorer)
+    public boolean googleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this);
-        if (isAvailable == ConnectionResult.SUCCESS) {
-            return true;
+        return(isAvailable == ConnectionResult.SUCCESS);
+    }
+
+    public void manageNonAuthorizationLocation(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
         } else {
-            if (api.isUserResolvableError(isAvailable)) {
-                Dialog dialog = api.getErrorDialog(this, isAvailable, 0);
-                dialog.show();
-            } else {
-                Toast.makeText(this, "Le service Google Map ne fonctionne pas", Toast.LENGTH_LONG).show();
-            }
-            return false;
+            Toast.makeText(getApplicationContext(), "L'application a besoin de l'autorisation d'utiliser les données de géocalisation pour fonctionner à plein régime", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -298,7 +316,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             InterestPointDAO interestPointDAO=new InterestPointDAO();
             try{
                 interestPoint = interestPointDAO.getInterestPointById(params[0]);
-
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -419,10 +436,10 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         protected void onPostExecute(Integer resultCode)
         {
             if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), "Vote enregistré", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.message_vote_recorded, Toast.LENGTH_SHORT).show();
             }
             else{
-                Toast.makeText(getApplicationContext(), "Vote non enregistré", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.message_vote_not_recorded, Toast.LENGTH_SHORT).show();
             }
         }
     }

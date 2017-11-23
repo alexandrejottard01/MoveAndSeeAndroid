@@ -21,4 +21,10 @@
     <string name="new_interest_point">Nouveau point d\'intérêt</string>
     <string name="press_map_to_create_point">Veuillez appuyer sur la map afin de créer un point</string>
     <string name="interest_point_create">Point d\'intérêt créé</string>
+    <string name="errer_create_interest_point">Erreur de création du point d\'intérêt</string>
+    <string name="message_create_unknown_point">Point inconnu créé</string>
+    <string name="message_error_create_unknown_point">Erreur de création du point inconnu</string>
+    <string name="message_service_unavailable_google_map">Le service Google Map ne fonctionne pas</string>
+    <string name="message_vote_recorded">Vote enregistré</string>
+    <string name="message_vote_not_recorded">Vote non enregistré</string>
 </resources>

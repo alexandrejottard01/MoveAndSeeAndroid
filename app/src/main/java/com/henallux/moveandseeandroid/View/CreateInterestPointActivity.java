@@ -58,13 +58,13 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
         latitudeLongitudeSelected = gson.fromJson(stringLatitudeLongitude, LatLng.class);
 
         //Bouton Submit InterestPoint
-        Button addInterestPoint = (Button) findViewById(R.id.button_submit_interest_point);
+        Button addInterestPoint = findViewById(R.id.button_submit_interest_point);
         addInterestPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Création de InterestPoint
-                EditText nameInterestPointEditText = (EditText) findViewById (R.id.name_interest_point);
+                EditText nameInterestPointEditText = findViewById (R.id.name_interest_point);
                 String nameInterestPoint = nameInterestPointEditText.getText().toString();
 
                 double latitude = latitudeLongitudeSelected.latitude;
@@ -75,7 +75,7 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
                 InterestPoint interestPoint = new InterestPoint(1,latitude,longitude,nameInterestPoint, dateCreation);
 
                 //Création de Description
-                EditText descriptionInterestPointEditText = (EditText) findViewById (R.id.explication_interest);
+                EditText descriptionInterestPointEditText = findViewById (R.id.explication_interest);
                 String descriptionInterestPoint = descriptionInterestPointEditText.getText().toString();
 
                 Description description = new Description(descriptionInterestPoint, 1, interestPoint);
@@ -166,12 +166,12 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
         protected void onPostExecute(Integer resultCode)
         {
             if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), "Point d'intérêt créé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.interest_point_create, Toast.LENGTH_SHORT).show();
                 Intent goToHomeConnected = new Intent(CreateInterestPointActivity.this, HomeConnectedActivity.class);
                 startActivity(goToHomeConnected);
             }
             else{
-                Toast.makeText(getApplicationContext(), "Erreur de création du point d'intérêt", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.errer_create_interest_point, Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -5,7 +5,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
+import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.R;
 
 /**
@@ -14,11 +19,22 @@ import com.henallux.moveandseeandroid.R;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    //Variable d'instance
+    private AccessToken token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         setTitle(getString(R.string.title_profile));
+
+        //Recupération du token
+        Gson gson = new Gson();
+        String tokenString = getIntent().getStringExtra("accessToken");
+        token = gson.fromJson(tokenString, AccessToken.class);
+
+        Toast.makeText(getApplicationContext(), token.getToken(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

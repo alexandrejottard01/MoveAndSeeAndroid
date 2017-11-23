@@ -19,4 +19,11 @@
     <string name="message_description_create">Description created</string>
     <string name="new_interest_point">New interest point</string>
     <string name="press_map_to_create_point">Please press the map to create a point</string>
+    <string name="interest_point_create">Point of interest created</string>
+    <string name="errer_create_interest_point">Error creating point of interest</string>
+    <string name="message_create_unknown_point">Unknown point created</string>
+    <string name="message_error_create_unknown_point">Unknown point creation error</string>
+    <string name="message_service_unavailable_google_map">Google Map service does not work</string>
+    <string name="message_vote_recorded">Recorded vote</string>
+    <string name="message_vote_not_recorded">Unsaved vote</string>
 </resources>

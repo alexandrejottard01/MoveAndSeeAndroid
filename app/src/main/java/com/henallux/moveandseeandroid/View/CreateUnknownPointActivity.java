@@ -51,7 +51,7 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
         mapFragment.getMapAsync(this);
 
         //Bouton Submit UnknownPoint
-        Button addUnknownPoint = (Button) findViewById(R.id.button_submit_unknown_point);
+        Button addUnknownPoint = findViewById(R.id.button_submit_unknown_point);
         addUnknownPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,12 +154,12 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
         protected void onPostExecute(Integer resultCode)
         {
             if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), "Point inconnu créé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.message_create_unknown_point, Toast.LENGTH_SHORT).show();
                 Intent goToHomeConnected = new Intent(CreateUnknownPointActivity.this, HomeConnectedActivity.class);
                 startActivity(goToHomeConnected);
             }
             else{
-                Toast.makeText(getApplicationContext(), "Erreur de création du point inconnu", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.message_error_create_unknown_point, Toast.LENGTH_SHORT).show();
             }
         }
     }
