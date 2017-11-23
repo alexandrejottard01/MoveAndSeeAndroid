@@ -29,39 +29,6 @@ import java.util.Date;
 
 public class InterestPointDAO {
 
-    public ArrayList<InterestPointWithVote> getAllInterestPoint()throws Exception{
-
-        ArrayList<InterestPointWithVote> listInterestPoint = new ArrayList<>();
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-
-        URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetAllInterestPoints");
-        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setDoInput(true);
-
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
-            StringBuilder stringBuilder = new StringBuilder();
-            String inputJsonString = "",line;
-
-            while((line = bufferedReader.readLine()) != null){
-                stringBuilder.append(line);
-            }
-            bufferedReader.close();
-            connection.disconnect();
-
-            inputJsonString = stringBuilder.toString();
-
-            JSONArray jsonArray = new JSONArray(inputJsonString);
-
-            for (int i = 0; i<jsonArray.length();i++){
-                listInterestPoint.add(gson.fromJson(jsonArray.getJSONObject(i).toString(),InterestPointWithVote.class));
-            }
-
-
-        return listInterestPoint;
-    }
-
     public int addInterestPoint(InterestPoint interestPoint)throws Exception{
 
         Gson gson = new GsonBuilder().create();
@@ -84,12 +51,72 @@ public class InterestPointDAO {
         return connection.getResponseCode();
     }
 
-    /* //Méthode bryan pour récupérer un objet
-    public ArrayList<InterestPointWithVote> getAllInterestPointBertrand()throws Exception{
+    public ArrayList<InterestPointWithVote> getAllInterestPoint()throws Exception{
 
+        ArrayList<InterestPointWithVote> listInterestPoint = new ArrayList<>();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
         URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetAllInterestPoints");
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputJsonString = "",line;
+
+        while((line = bufferedReader.readLine()) != null){
+            stringBuilder.append(line);
+        }
+        bufferedReader.close();
+        connection.disconnect();
+
+        inputJsonString = stringBuilder.toString();
+
+        JSONArray jsonArray = new JSONArray(inputJsonString);
+
+        for (int i = 0; i<jsonArray.length();i++){
+            listInterestPoint.add(gson.fromJson(jsonArray.getJSONObject(i).toString(),InterestPointWithVote.class));
+        }
+
+
+        return listInterestPoint;
+    }
+
+    public InterestPointWithVote getInterestPointById(long idInterestPoint)throws Exception{
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetInterestPointBy/"+idInterestPoint);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setDoInput(true);
+
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputJsonString = "",line;
+
+        while((line = bufferedReader.readLine()) != null){
+            stringBuilder.append(line);
+        }
+        bufferedReader.close();
+        connection.disconnect();
+
+        inputJsonString = stringBuilder.toString();
+
+        InterestPointWithVote interestPoint = gson.fromJson(inputJsonString,InterestPointWithVote.class);
+
+        return interestPoint;
+    }
+
+    //Méthode bryan pour récupérer un objet
+   /* public ArrayList<InterestPointWithVote> getAllInterestPointBertrand(long idInterestPoint)throws Exception{
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetInterestPointBy/"+idInterestPoint);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("GET");
         connection.setDoOutput(true);
@@ -107,11 +134,11 @@ public class InterestPointDAO {
 
             inputJsonString = stringBuilder.toString();
 
-            for()
-            return gson.fromJson(inputJsonString,User.class);
+
+            return gson.fromJson(inputJsonString,InterestPoint.class);
         }
         return listInterestPoint;
-    }
-     */
+    }*/
+
 
 }

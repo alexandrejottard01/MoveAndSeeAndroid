@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.henallux.moveandseeandroid.DAO.DeleteUnknownPointAndAddInterestPointDAO;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
 import com.henallux.moveandseeandroid.Model.Description;
@@ -79,7 +80,11 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
 
                 Description description = new Description(descriptionInterestPoint, 1, interestPoint);
 
-                new DeleteUnknownPointAsync().execute(description);
+                long idUnknownPoint = unknownPoint.idUnknownPoint;
+
+
+
+                new DeleteUnknownPointAndAddInterestPointAsync().execute(description,idUnknownPoint);
 
             }
         });
@@ -192,30 +197,22 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
         }
     }*/
 
-    private class DeleteUnknownPointAsync extends AsyncTask<Description,Void,Integer> //Si la supression fonctionne pas, l'ajout du point d'intéret est quand meme fait
+    private class DeleteUnknownPointAndAddInterestPointAsync extends AsyncTask<Object,Void,Integer> //Si la supression fonctionne pas, l'ajout du point d'intéret est quand meme fait
     {
         @Override
-        protected Integer doInBackground(Description... params)
+        protected Integer doInBackground(Object... params)
         {
             Integer resultCode =0;
-            DescriptionDAO descriptionDAO = new DescriptionDAO();
+            DeleteUnknownPointAndAddInterestPointDAO deleteUnknownPointAndAddInterestPointDAO = new DeleteUnknownPointAndAddInterestPointDAO();
+
+            Description description = (Description) params[0];
+            Long idUnknownPoint = (Long) params[1];
 
             try{
-                resultCode=descriptionDAO.addDescription(params[0]);
+                resultCode=deleteUnknownPointAndAddInterestPointDAO.deleteUnknownPointAndAddInterestPoint(description, idUnknownPoint);
             }
             catch (Exception e) {
                 e.printStackTrace();
-            }
-
-            if(resultCode == 200){
-                UnknownPointDAO unknownPointDAO = new UnknownPointDAO();
-
-                try{
-                    resultCode=unknownPointDAO.deleteUnknownPoint(unknownPoint.idUnknownPoint);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
             return resultCode;
@@ -225,7 +222,7 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
         protected void onPostExecute(Integer resultCode)
         {
             if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), R.string.interest_point_create, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Point d'intérêt créé", Toast.LENGTH_SHORT).show();
                 Intent goToHomeConnected = new Intent(CreateDescriptionOfUnknownPointActivity.this, HomeConnectedActivity.class);
                 startActivity(goToHomeConnected);
             }

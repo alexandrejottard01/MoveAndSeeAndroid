@@ -42,6 +42,8 @@ public class Description {
         this.idInterestPointNavigation = idInterestPointNavigation;
     }
 
+
+
     public long getIdDescription() {
         return idDescription;
     }
