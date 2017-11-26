@@ -1,8 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,8 +25,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
+import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
+import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.R;
 
 import java.net.HttpURLConnection;
@@ -37,6 +42,9 @@ import java.util.Date;
 public class CreateUnknownPointActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Variable d'instance
+    private User userCurrent;
+    private SharedPreferences preferences;
+    private String token;
     private GoogleMap map;
     private LatLng latitudeLongitude;
 
@@ -60,12 +68,27 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
                 double longitude = latitudeLongitude.longitude;
                 Date dateCreation = Calendar.getInstance().getTime();
 
-                UnknownPoint unknownPoint = new UnknownPoint(1,latitude,longitude,dateCreation);
+                UnknownPoint unknownPoint = new UnknownPoint(userCurrent.id,latitude,longitude,dateCreation);
 
                 new AddUnknownPointAsync().execute(unknownPoint);
 
             }
         });
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
+
+        String pseudo = getUsernameByToken(token);
+        fillUserCurrentById(pseudo);
+    }
+
+    private void fillUserCurrentById(String idUser){
+        new GetUserByIdAsync().execute(idUser);
+    }
+
+    private String getUsernameByToken(String token){
+        JWT jwt = new JWT(token);
+        String subject = jwt.getSubject();
+        return subject;
     }
 
     //App Bar
@@ -141,7 +164,7 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
             UnknownPointDAO unknownPointDAO = new UnknownPointDAO();
 
             try{
-                resultCode=unknownPointDAO.addUnknownPoint(params[0]);
+                resultCode=unknownPointDAO.addUnknownPoint(token, params[0]);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -161,6 +184,34 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
             else{
                 Toast.makeText(getApplicationContext(), R.string.message_error_create_unknown_point, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    //Classe Async (User)
+    private class GetUserByIdAsync extends AsyncTask<String,Void,User>
+    {
+        @Override
+        protected User doInBackground(String... params) {
+            User user;
+            UserDAO userDAO=new UserDAO();
+
+            try{
+                user = userDAO.getUserByPseudo(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                user = null;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user)
+        {
+            if(user == null){
+                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+            }
+
+            userCurrent = user;
         }
     }
 }

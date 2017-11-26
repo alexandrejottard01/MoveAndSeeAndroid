@@ -8,12 +8,12 @@ public class Description {
 
     public long idDescription;
     public String explication;
-    public long idUser;
+    public String idUser;
     public long idInterestPoint;
     public InterestPoint idInterestPointNavigation;
     public User idUserNavigation;
 
-    public Description(long idDescription, String explication, long idUser, long idInterestPoint, InterestPoint idInterestPointNavigation, User idUserNavigation) {
+    public Description(long idDescription, String explication, String idUser, long idInterestPoint, InterestPoint idInterestPointNavigation, User idUserNavigation) {
         this.idDescription = idDescription;
         this.explication = explication;
         this.idUser = idUser;
@@ -22,7 +22,7 @@ public class Description {
         this.idUserNavigation = idUserNavigation;
     }
 
-    public Description(String explication, long idUser, long idInterestPoint, InterestPoint idInterestPointNavigation, User idUserNavigation) {
+    public Description(String explication, String idUser, long idInterestPoint, InterestPoint idInterestPointNavigation, User idUserNavigation) {
         this.explication = explication;
         this.idUser = idUser;
         this.idInterestPoint = idInterestPoint;
@@ -30,13 +30,13 @@ public class Description {
         this.idUserNavigation = idUserNavigation;
     }
 
-    public Description(String explication, long idUser, long idInterestPoint) {
+    public Description(String explication, String idUser, long idInterestPoint) {
         this.explication = explication;
         this.idUser = idUser;
         this.idInterestPoint = idInterestPoint;
     }
 
-    public Description(String explication, long idUser, InterestPoint idInterestPointNavigation) {
+    public Description(String explication, String idUser, InterestPoint idInterestPointNavigation) {
         this.explication = explication;
         this.idUser = idUser;
         this.idInterestPointNavigation = idInterestPointNavigation;
@@ -60,11 +60,11 @@ public class Description {
         this.explication = explication;
     }
 
-    public long getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(long idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 

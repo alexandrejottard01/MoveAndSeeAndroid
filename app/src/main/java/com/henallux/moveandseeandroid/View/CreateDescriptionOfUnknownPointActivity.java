@@ -1,8 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,10 +26,12 @@ import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.DeleteUnknownPointAndAddInterestPointDAO;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
+import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
+import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.R;
 
 import java.net.HttpURLConnection;
@@ -40,6 +45,9 @@ import java.util.Date;
 public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Variable d'instance
+    private User userCurrent;
+    private SharedPreferences preferences;
+    private String token;
     private GoogleMap map;
     private UnknownPoint unknownPoint;
 
@@ -72,13 +80,13 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
 
                 Date date = Calendar.getInstance().getTime();
 
-                InterestPoint interestPoint = new InterestPoint(1,latitude,longitude,nameInterestPoint, date);
+                InterestPoint interestPoint = new InterestPoint(userCurrent.id,latitude,longitude,nameInterestPoint, date);
 
                 //Création de Description
                 EditText descriptionInterestPointEditText = (EditText) findViewById (R.id.explication_interest);
                 String descriptionInterestPoint = descriptionInterestPointEditText.getText().toString();
 
-                Description description = new Description(descriptionInterestPoint, 1, interestPoint);
+                Description description = new Description(descriptionInterestPoint, userCurrent.id, interestPoint);
 
                 long idUnknownPoint = unknownPoint.idUnknownPoint;
 
@@ -88,6 +96,22 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
 
             }
         });
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
+
+        String pseudo = getUsernameByToken(token);
+        fillUserCurrentById(pseudo);
+    }
+
+    private void fillUserCurrentById(String idUser){
+        new GetUserByIdAsync().execute(idUser);
+    }
+
+    private String getUsernameByToken(String token){
+        JWT jwt = new JWT(token);
+        String subject = jwt.getSubject();
+        return subject;
     }
 
     //App Bar
@@ -209,7 +233,7 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
             Long idUnknownPoint = (Long) params[1];
 
             try{
-                resultCode=deleteUnknownPointAndAddInterestPointDAO.deleteUnknownPointAndAddInterestPoint(description, idUnknownPoint);
+                resultCode=deleteUnknownPointAndAddInterestPointDAO.deleteUnknownPointAndAddInterestPoint(token, description, idUnknownPoint);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -229,6 +253,34 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
             else{
                 Toast.makeText(getApplicationContext(), R.string.errer_create_interest_point, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    //Classe Async (User)
+    private class GetUserByIdAsync extends AsyncTask<String,Void,User>
+    {
+        @Override
+        protected User doInBackground(String... params) {
+            User user;
+            UserDAO userDAO=new UserDAO();
+
+            try{
+                user = userDAO.getUserByPseudo(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                user = null;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user)
+        {
+            if(user == null){
+                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+            }
+
+            userCurrent = user;
         }
     }
 }

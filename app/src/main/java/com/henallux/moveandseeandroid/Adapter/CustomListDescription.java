@@ -1,7 +1,9 @@
 package com.henallux.moveandseeandroid.Adapter;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,11 +34,14 @@ import java.util.ArrayList;
  */
 
 public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
+    //Variables d'instance
+    HomeConnectedActivity homeConnectedActivity;
 
     //View viewDescription;
 
     public CustomListDescription(@NonNull Context context, ArrayList<DescriptionWithVote> listDescription) {
         super(context, R.layout.list_view_descriptions, listDescription);
+        homeConnectedActivity = (HomeConnectedActivity) context;
     }
 
     @NonNull
@@ -53,7 +58,7 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
 
 
 
-            textPseudo.setText(descriptionWithVote.description.idUserNavigation.pseudo);
+            textPseudo.setText(descriptionWithVote.description.idUserNavigation.userName);
             textExplication.setText(descriptionWithVote.description.explication);
 
             if(descriptionWithVote.average != -1){
@@ -67,7 +72,7 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             @Override
             public void onClick(View v) {
 
-            VoteDescription voteDescriptionPositive = new VoteDescription(true,1,descriptionWithVote.description.idDescription);
+            VoteDescription voteDescriptionPositive = new VoteDescription(true,"898c5147-3b5c-44ad-a3c8-bd8393175c6a",descriptionWithVote.description.idDescription);
             new AddVoteDescriptionAsync().execute(voteDescriptionPositive);
             }
         });
@@ -78,10 +83,12 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             @Override
             public void onClick(View v) {
 
-                VoteDescription voteDescriptionNegative = new VoteDescription(false,1,descriptionWithVote.description.idDescription);
+                VoteDescription voteDescriptionNegative = new VoteDescription(false,"898c5147-3b5c-44ad-a3c8-bd8393175c6a",descriptionWithVote.description.idDescription);
                 new AddVoteDescriptionAsync().execute(voteDescriptionNegative);
             }
         });
+
+
 
         return viewDescription;
 
@@ -96,7 +103,7 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             VoteDescriptionDAO voteInterestPointDAO=new VoteDescriptionDAO();
 
             try{
-                resultCode = voteInterestPointDAO.addVoteDescription(params[0]);
+                resultCode = voteInterestPointDAO.addVoteDescription(homeConnectedActivity.getToken(), params[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }

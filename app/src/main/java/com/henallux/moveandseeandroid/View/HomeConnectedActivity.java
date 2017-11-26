@@ -4,14 +4,17 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +24,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.location.places.Place;
@@ -39,11 +43,13 @@ import com.henallux.moveandseeandroid.Adapter.CustomListDescription;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.InterestPointDAO;
 import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
+import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.DAO.VoteInterestPointDAO;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
+import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.Model.VoteInterestPoint;
 import com.henallux.moveandseeandroid.R;
 
@@ -53,6 +59,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.impl.TextCodec;
+
 /**
  * Created by Alexandre on 14-11-17.
  */
@@ -60,6 +73,9 @@ import java.util.List;
 public class HomeConnectedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     //Variable d'instance
+    private User userCurrent;
+    private SharedPreferences preferences;
+    private String token;
     private GoogleMap map;
     HashMap<Marker, InterestPointWithVote> hashMap = new HashMap<Marker, InterestPointWithVote>();
     HashMap<Marker, UnknownPoint> hashMapUnknownPoint = new HashMap<Marker, UnknownPoint>();
@@ -79,7 +95,25 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             Toast.makeText(this, R.string.message_service_unavailable_google_map, Toast.LENGTH_LONG).show();
         }
 
-        manageNonAuthorizationLocation();
+        //manageNonAuthorizationLocation();
+
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
+
+
+        String pseudo = getUsernameByToken(token);
+        fillUserCurrentById(pseudo);
+
+    }
+
+    private void fillUserCurrentById(String idUser){
+        new GetUserByIdAsync().execute(idUser);
+    }
+
+    private String getUsernameByToken(String token){
+        JWT jwt = new JWT(token);
+        String subject = jwt.getSubject();
+        return subject;
     }
 
     //App Bar
@@ -200,7 +234,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
                 @Override
                 public void onClick(View v) {
-                    VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,1,interestPointWithVote.interestPoint.idInterestPoint);
+                    VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,userCurrent.id,interestPointWithVote.interestPoint.idInterestPoint);
                     new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
                 }
             });
@@ -211,7 +245,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
                 @Override
                 public void onClick(View v) {
-                    VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,1,interestPointWithVote.interestPoint.idInterestPoint);
+                    VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,userCurrent.id,interestPointWithVote.interestPoint.idInterestPoint);
                     new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
                 }
             });
@@ -306,6 +340,10 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    public String getToken(){
+        return token;
+    }
+
     //Classe Async (InterestPoint)
     private class GetInterestPointByIdAsync extends AsyncTask<Long,Void,InterestPointWithVote>
     {
@@ -315,7 +353,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             InterestPointWithVote interestPoint;
             InterestPointDAO interestPointDAO=new InterestPointDAO();
             try{
-                interestPoint = interestPointDAO.getInterestPointById(params[0]);
+                interestPoint = interestPointDAO.getInterestPointById(token, params[0]);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -338,10 +376,11 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected ArrayList<InterestPointWithVote> doInBackground(String... params)
         {
+            int resultCode;
             ArrayList<InterestPointWithVote> listInterestPoints = new ArrayList<>();
             InterestPointDAO interestPointDAO=new InterestPointDAO();
             try{
-                listInterestPoints=interestPointDAO.getAllInterestPoint();
+                listInterestPoints = interestPointDAO.getAllInterestPoint(token);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -373,7 +412,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             ArrayList<UnknownPoint> listUnknownPoints = new ArrayList<>();
             UnknownPointDAO unknownPointDAO=new UnknownPointDAO();
             try{
-                listUnknownPoints=unknownPointDAO.getAllUnknownPoint();
+                listUnknownPoints=unknownPointDAO.getAllUnknownPoint(token);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -402,7 +441,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             DescriptionDAO descriptionDao=new DescriptionDAO();
             ArrayList<DescriptionWithVote> listDescriptionAsync=new ArrayList<>();
             try{
-                listDescriptionAsync = descriptionDao.getAllDescriptionsByInterestPoint(params[0].interestPoint.idInterestPoint);
+                listDescriptionAsync = descriptionDao.getAllDescriptionsByInterestPoint(token, params[0].interestPoint.idInterestPoint);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -425,7 +464,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             VoteInterestPointDAO voteInterestPointDAO=new VoteInterestPointDAO();
 
             try{
-                resultCode = voteInterestPointDAO.addVoteInterestPoint(params[0]);
+                resultCode = voteInterestPointDAO.addVoteInterestPoint(token, params[0]);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -441,6 +480,34 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             else{
                 Toast.makeText(getApplicationContext(), R.string.message_vote_not_recorded, Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    //Classe Async (User)
+    private class GetUserByIdAsync extends AsyncTask<String,Void,User>
+    {
+        @Override
+        protected User doInBackground(String... params) {
+            User user;
+            UserDAO userDAO=new UserDAO();
+
+            try{
+                user = userDAO.getUserByPseudo(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                user = null;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user)
+        {
+            if(user == null){
+                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+            }
+
+            userCurrent = user;
         }
     }
 

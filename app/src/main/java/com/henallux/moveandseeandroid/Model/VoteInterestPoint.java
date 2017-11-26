@@ -7,12 +7,12 @@ package com.henallux.moveandseeandroid.Model;
 public class VoteInterestPoint {
 
     public boolean isPositiveAssessment;
-    public long idUser;
+    public String idUser;
     public long idInterestPoint;
     public InterestPoint idInterestPointNavigation;
     public User idUserNavigation;
 
-    public VoteInterestPoint(boolean isPositiveAssessment, long idUser, long idInterestPoint) {
+    public VoteInterestPoint(boolean isPositiveAssessment, String idUser, long idInterestPoint) {
         this.isPositiveAssessment = isPositiveAssessment;
         this.idUser = idUser;
         this.idInterestPoint = idInterestPoint;

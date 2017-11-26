@@ -2,6 +2,7 @@ package com.henallux.moveandseeandroid.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
 
@@ -14,7 +15,7 @@ import java.net.URL;
  */
 
 public class DeleteUnknownPointAndAddInterestPointDAO {
-    public int deleteUnknownPointAndAddInterestPoint(Description description, long idUnknownPoint)throws Exception{
+    public int deleteUnknownPointAndAddInterestPoint(String token, Description description, long idUnknownPoint)throws Exception{
 
         Gson gson = new GsonBuilder().create();
         String outputJsonString = gson.toJson(description);
@@ -23,6 +24,7 @@ public class DeleteUnknownPointAndAddInterestPointDAO {
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoInput(true);
         connection.setRequestProperty("Content-Type", "application/json");
 

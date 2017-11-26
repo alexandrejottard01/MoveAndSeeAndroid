@@ -2,6 +2,7 @@ package com.henallux.moveandseeandroid.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.Model.VoteDescription;
 import com.henallux.moveandseeandroid.Model.VoteInterestPoint;
 
@@ -15,7 +16,7 @@ import java.net.URL;
 
 public class VoteDescriptionDAO {
 
-    public int addVoteDescription(VoteDescription voteDescription)throws Exception{
+    public int addVoteDescription(String token, VoteDescription voteDescription)throws Exception{
 
         Gson gson = new GsonBuilder().create();
         String outputJsonString = gson.toJson(voteDescription);
@@ -24,6 +25,7 @@ public class VoteDescriptionDAO {
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoInput(true);
         connection.setRequestProperty("Content-Type", "application/json");
 

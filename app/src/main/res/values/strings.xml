@@ -26,4 +26,12 @@
     <string name="message_service_unavailable_google_map">Google Map service does not work</string>
     <string name="message_vote_recorded">Recorded vote</string>
     <string name="message_vote_not_recorded">Unsaved vote</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="mail">Mail</string>
+    <string name="button_log_in">Log in</string>
+    <string name="button_register">Register</string>
+    <string name="mot_de_passe">Password</string>
+    <string name="confirmation_password">Confirmation password</string>
+    <string name="registration_error">registration error</string>
+    <string name="button_registration">Registration</string>
 </resources>

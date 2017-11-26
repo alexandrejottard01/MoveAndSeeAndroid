@@ -1,11 +1,14 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auth0.android.jwt.JWT;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,13 +28,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
+import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.Model.Description;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
+import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.R;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.impl.crypto.MacProvider;
+import java.security.Key;
 
 /**
  * Created by Alexandre on 14-11-17.
@@ -39,6 +50,9 @@ import java.util.List;
 public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     //Variable d'instance
+    private User userCurrent;
+    private SharedPreferences preferences;
+    private String token;
     private GoogleMap map;
     private InterestPointWithVote interestPointWithVote;
 
@@ -93,16 +107,30 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
             String explication = explicationEditText.getText().toString();
 
             long idInterestPoint = interestPointWithVote.interestPoint.idInterestPoint;
-            Description description = new Description(explication,1,idInterestPoint);
+            Description description = new Description(explication,userCurrent.id,idInterestPoint);
 
             new AddDecriptionAsync().execute(description);
 
             }
         });
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
+
+        String pseudo = getUsernameByToken(token);
+        fillUserCurrentById(pseudo);
 
 
+    }
 
+    private void fillUserCurrentById(String idUser){
+        new GetUserByIdAsync().execute(idUser);
+    }
+
+    private String getUsernameByToken(String token){
+        JWT jwt = new JWT(token);
+        String subject = jwt.getSubject();
+        return subject;
     }
 
     //App Bar
@@ -179,7 +207,7 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
             Integer resultCode =0;
             DescriptionDAO descriptionDAO=new DescriptionDAO();
             try{
-                resultCode=descriptionDAO.addDescription(params[0]);
+                resultCode=descriptionDAO.addDescription(token, params[0]);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -199,6 +227,34 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
                 Toast.makeText(getApplicationContext(), R.string.message_errer_description_no_create, Toast.LENGTH_SHORT).show();
             }
 
+        }
+    }
+
+    //Classe Async (User)
+    private class GetUserByIdAsync extends AsyncTask<String,Void,User>
+    {
+        @Override
+        protected User doInBackground(String... params) {
+            User user;
+            UserDAO userDAO=new UserDAO();
+
+            try{
+                user = userDAO.getUserByPseudo(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                user = null;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user)
+        {
+            if(user == null){
+                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+            }
+
+            userCurrent = user;
         }
     }
 }

@@ -2,6 +2,7 @@ package com.henallux.moveandseeandroid.DAO;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
 import com.henallux.moveandseeandroid.Model.InterestPoint;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 
 public class UnknownPointDAO {
 
-    public ArrayList<UnknownPoint> getAllUnknownPoint()throws Exception{
+    public ArrayList<UnknownPoint> getAllUnknownPoint(String token)throws Exception{
 
         ArrayList<UnknownPoint> listUnknownPoint = new ArrayList<>();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
@@ -30,6 +31,7 @@ public class UnknownPointDAO {
         URL url = new URL("http://moveandsee.azurewebsites.net/api/UnknownPoint/GetAllUnknownPoints");
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoInput(true);
 
 
@@ -54,11 +56,12 @@ public class UnknownPointDAO {
         return listUnknownPoint;
     }
 
-    public int deleteUnknownPoint(long idUnknownPoint)throws Exception{
+    public int deleteUnknownPoint(String token, long idUnknownPoint)throws Exception{
 
         URL url = new URL("http://moveandsee.azurewebsites.net/api/UnknownPoint/DeleteUnknownPointById/"+idUnknownPoint);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("DELETE");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoInput(true);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
         bufferedReader.close();
@@ -67,7 +70,7 @@ public class UnknownPointDAO {
         return connection.getResponseCode();
     }
 
-    public int addUnknownPoint(UnknownPoint unknownPoint)throws Exception{
+    public int addUnknownPoint(String token, UnknownPoint unknownPoint)throws Exception{
 
         Gson gson = new GsonBuilder().create();
         String outputJsonString = gson.toJson(unknownPoint);
@@ -76,6 +79,7 @@ public class UnknownPointDAO {
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 
         connection.setRequestMethod("POST");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
         connection.setDoInput(true);
         connection.setRequestProperty("Content-Type", "application/json");
 

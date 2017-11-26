@@ -11,27 +11,32 @@ import java.util.Date;
 
 public class User {
 
-    public long idUser;
-    public String pseudo;
-    public String password;
+    public String id;
+    public String userName;
     public boolean isCertified;
     public String nameCertified;
+    public String password;
     public String email;
     public String language;
     public boolean isMale;
     public Date birthDate;
-    public boolean isAdmin;
 
-    public User(long idUser, String pseudo, String password, boolean isCertified, String nameCertified, String email, String language, boolean isMale, Date birthDate, boolean isAdmin) {
-        this.idUser = idUser;
-        this.pseudo = pseudo;
-        this.password = password;
+    public User(String id, String userName, boolean isCertified, String nameCertified, String email, String language, boolean isMale, Date birthDate) {
+        this.id = id;
+        this.userName = userName;
         this.isCertified = isCertified;
         this.nameCertified = nameCertified;
         this.email = email;
         this.language = language;
         this.isMale = isMale;
         this.birthDate = birthDate;
-        this.isAdmin = isAdmin;
+    }
+
+    public User(String userName, boolean isCertified, String password, String email, String language) {
+        this.userName = userName;
+        this.isCertified = isCertified;
+        this.password = password;
+        this.email = email;
+        this.language = language;
     }
 }

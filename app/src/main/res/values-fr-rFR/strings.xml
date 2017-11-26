@@ -27,4 +27,10 @@
     <string name="message_service_unavailable_google_map">Le service Google Map ne fonctionne pas</string>
     <string name="message_vote_recorded">Vote enregistré</string>
     <string name="message_vote_not_recorded">Vote non enregistré</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="pseudo">Pseudo</string>
+    <string name="confirmation_password">Confirmation mot de passe</string>
+    <string name="mail">E-mail</string>
+    <string name="button_log_in">Se connecter</string>
+    <string name="button_register">S\'inscrire</string>
 </resources>

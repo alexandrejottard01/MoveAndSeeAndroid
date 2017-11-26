@@ -1,8 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +32,8 @@ import java.util.HashMap;
  */
 
 public class HomeNotConnectedActivity extends AppCompatActivity {
+    //Variable d'instance
+    private SharedPreferences preferences;
 
     //OnCreate
     @Override
@@ -38,7 +42,7 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_not_connected);
         setTitle(getString(R.string.title_home_not_connected));
 
-        Button login = (Button) findViewById(R.id.login);
+        Button login = findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -51,6 +55,16 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
 
                 UserLogin userLogin = new UserLogin(pseudo,password);
                 new UserLoginAsync().execute(userLogin);
+            }
+        });
+
+        Button register = findViewById(R.id.toRegistration);
+        register.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intentToRegistration = new Intent(HomeNotConnectedActivity.this, RegistrationActivity.class);
+                startActivity(intentToRegistration);
             }
         });
     }
@@ -77,12 +91,18 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(AccessToken token){
             if(token != null){
-                Gson gson = new Gson();
+                /*Gson gson = new Gson();
                 String tokenConverted = gson.toJson(token);
                 Intent intentToHome = new Intent(HomeNotConnectedActivity.this, ProfileActivity.class);
-                intentToHome.putExtra("accessToken", tokenConverted);
+                intentToHome.putExtra("accessToken", tokenConverted);*/
 
-                startActivity(intentToHome);
+                preferences = PreferenceManager.getDefaultSharedPreferences(HomeNotConnectedActivity.this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("token",token.getToken());
+                editor.commit();
+
+                Intent intentToHomeConnected = new Intent(HomeNotConnectedActivity.this, HomeConnectedActivity.class);
+                startActivity(intentToHomeConnected);
             }else{
                 Toast.makeText(HomeNotConnectedActivity.this,"connexion Error", Toast.LENGTH_SHORT).show();
             }

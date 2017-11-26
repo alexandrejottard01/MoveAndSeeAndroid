@@ -1,16 +1,19 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.gson.Gson;
+import com.auth0.android.jwt.JWT;
+import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.Model.AccessToken;
+import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.R;
 
 /**
@@ -20,7 +23,9 @@ import com.henallux.moveandseeandroid.R;
 public class ProfileActivity extends AppCompatActivity {
 
     //Variable d'instance
-    private AccessToken token;
+    private User userCurrent;
+    private SharedPreferences preferences;
+    private String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -28,13 +33,22 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         setTitle(getString(R.string.title_profile));
 
-        //Recupération du token
-        Gson gson = new Gson();
-        String tokenString = getIntent().getStringExtra("accessToken");
-        token = gson.fromJson(tokenString, AccessToken.class);
 
-        Toast.makeText(getApplicationContext(), token.getToken(), Toast.LENGTH_SHORT).show();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
 
+        String pseudo = getUsernameByToken(token);
+        fillUserCurrentById(pseudo);
+    }
+
+    private void fillUserCurrentById(String idUser){
+        new GetUserByIdAsync().execute(idUser);
+    }
+
+    private String getUsernameByToken(String token){
+        JWT jwt = new JWT(token);
+        String subject = jwt.getSubject();
+        return subject;
     }
 
     @Override
@@ -67,5 +81,33 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //Classe Async (User)
+    private class GetUserByIdAsync extends AsyncTask<String,Void,User>
+    {
+        @Override
+        protected User doInBackground(String... params) {
+            User user;
+            UserDAO userDAO=new UserDAO();
+
+            try{
+                user = userDAO.getUserByPseudo(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                user = null;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(User user)
+        {
+            if(user == null){
+                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+            }
+
+            userCurrent = user;
+        }
     }
 }
