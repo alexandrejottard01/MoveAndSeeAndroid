@@ -34,7 +34,6 @@ public class DeleteUnknownPointAndAddInterestPointDAO {
         outputStream.flush();
         outputStream.close();
 
-
         return connection.getResponseCode();
     }
 }

@@ -33,12 +33,15 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         setTitle(getString(R.string.title_profile));
 
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
+        setTokenInPreferences();
 
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
+    }
+
+    private void setTokenInPreferences(){
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
     }
 
     private void fillUserCurrentById(String idUser){

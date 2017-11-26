@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,11 +36,6 @@ import com.henallux.moveandseeandroid.R;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.List;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
-import java.security.Key;
 
 /**
  * Created by Alexandre on 14-11-17.
@@ -114,13 +108,17 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
             }
         });
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
+        setTokenInPreferences();
 
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
 
 
+    }
+
+    private void setTokenInPreferences(){
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
     }
 
     private void fillUserCurrentById(String idUser){

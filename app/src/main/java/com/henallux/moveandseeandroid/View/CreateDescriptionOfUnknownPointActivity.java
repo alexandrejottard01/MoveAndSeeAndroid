@@ -97,11 +97,15 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
             }
         });
 
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
+        setTokenInPreferences();
 
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
+    }
+
+    private void setTokenInPreferences(){
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
     }
 
     private void fillUserCurrentById(String idUser){

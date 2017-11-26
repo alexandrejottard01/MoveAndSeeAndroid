@@ -1,8 +1,6 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -11,10 +9,8 @@ import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,8 +23,6 @@ import android.widget.Toast;
 import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +40,6 @@ import com.henallux.moveandseeandroid.DAO.UnknownPointDAO;
 import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.DAO.VoteInterestPointDAO;
 import com.henallux.moveandseeandroid.Model.DescriptionWithVote;
-import com.henallux.moveandseeandroid.Model.InterestPoint;
 import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
 import com.henallux.moveandseeandroid.Model.UnknownPoint;
 import com.henallux.moveandseeandroid.Model.User;
@@ -59,29 +52,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.impl.TextCodec;
-
 /**
  * Created by Alexandre on 14-11-17.
  */
 
 public class HomeConnectedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    //Variable d'instance
     private User userCurrent;
     private SharedPreferences preferences;
     private String token;
     private GoogleMap map;
-    HashMap<Marker, InterestPointWithVote> hashMap = new HashMap<Marker, InterestPointWithVote>();
-    HashMap<Marker, UnknownPoint> hashMapUnknownPoint = new HashMap<Marker, UnknownPoint>();
+    HashMap<Marker, InterestPointWithVote> hashMap = new HashMap();
+    HashMap<Marker, UnknownPoint> hashMapUnknownPoint = new HashMap();
     private ListView listDescription;
 
-    //OnCreate
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,15 +79,15 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             Toast.makeText(this, R.string.message_service_unavailable_google_map, Toast.LENGTH_LONG).show();
         }
 
-        //manageNonAuthorizationLocation();
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
-
-
+        setTokenInPreferences();
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
 
+    }
+
+    private void setTokenInPreferences(){
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
     }
 
     private void fillUserCurrentById(String idUser){
@@ -112,11 +96,9 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     private String getUsernameByToken(String token){
         JWT jwt = new JWT(token);
-        String subject = jwt.getSubject();
-        return subject;
+        return jwt.getSubject();
     }
 
-    //App Bar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
@@ -149,13 +131,13 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         return super.onOptionsItemSelected(item);
     }
 
-    //OnMapReady
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
         displayInterestPoints();
         displayUnknownPoints();
+
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
         goToLocationZoom(50.469424, 4.862533, 15);
         googleMap.setOnMarkerClickListener(this);
@@ -170,8 +152,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             }
         });
     }
-
-
 
     private void displayInterestPoints(){
         try {
@@ -193,18 +173,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         LatLng latitudeLongitude = new LatLng(latitude, longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latitudeLongitude, zoom);
         map.moveCamera(update);
-    }
-
-    //C'est quoi cette méthode ?
-    //Méthode pour récupérer la sellection de lieu par l'utilisateur
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(data, this);
-                String toastMsg = String.format("Place: %s", place.getName());
-                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
-            }
-
     }
 
     //Evenement Clique sur Marker
@@ -345,38 +313,11 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     }
 
     //Classe Async (InterestPoint)
-    private class GetInterestPointByIdAsync extends AsyncTask<Long,Void,InterestPointWithVote>
-    {
-        @Override
-        protected InterestPointWithVote doInBackground(Long... params)
-        {
-            InterestPointWithVote interestPoint;
-            InterestPointDAO interestPointDAO=new InterestPointDAO();
-            try{
-                interestPoint = interestPointDAO.getInterestPointById(token, params[0]);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                interestPoint = null;
-            }
-
-            return interestPoint;
-        }
-
-        /*@Override
-        protected InterestPointWithVote onPostExecute(InterestPointWithVote interestPointWithVote)
-        {
-            return interestPointWithVote;
-        }*/
-    }
-
-    //Classe Async (InterestPoint)
     private class GetAllInterestPointsAsync extends AsyncTask<String,Void,ArrayList<InterestPointWithVote>>
     {
         @Override
         protected ArrayList<InterestPointWithVote> doInBackground(String... params)
         {
-            int resultCode;
             ArrayList<InterestPointWithVote> listInterestPoints = new ArrayList<>();
             InterestPointDAO interestPointDAO=new InterestPointDAO();
             try{

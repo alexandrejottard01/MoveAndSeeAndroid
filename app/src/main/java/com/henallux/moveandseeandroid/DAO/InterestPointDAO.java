@@ -93,7 +93,7 @@ public class InterestPointDAO {
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
 
-        URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetInterestPointBy/"+idInterestPoint);
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/InterestPoint/GetInterestPointById/"+idInterestPoint);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Bearer " + token);

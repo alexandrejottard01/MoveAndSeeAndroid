@@ -74,11 +74,15 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
 
             }
         });
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
+        setTokenInPreferences();
 
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
+    }
+
+    private void setTokenInPreferences(){
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token",null);
     }
 
     private void fillUserCurrentById(String idUser){
