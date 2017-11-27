@@ -294,25 +294,17 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
     }
 
-    public boolean googleServicesAvailable() {
+    private boolean googleServicesAvailable() {
         GoogleApiAvailability api = GoogleApiAvailability.getInstance();
         int isAvailable = api.isGooglePlayServicesAvailable(this);
         return(isAvailable == ConnectionResult.SUCCESS);
-    }
-
-    public void manageNonAuthorizationLocation(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            map.setMyLocationEnabled(true);
-        } else {
-            Toast.makeText(getApplicationContext(), "L'application a besoin de l'autorisation d'utiliser les données de géocalisation pour fonctionner à plein régime", Toast.LENGTH_SHORT).show();
-        }
     }
 
     public String getToken(){
         return token;
     }
 
-    //Classe Async (InterestPoint)
+    //Classe GetAllInterestPointsAsync
     private class GetAllInterestPointsAsync extends AsyncTask<String,Void,ArrayList<InterestPointWithVote>>
     {
         @Override
@@ -344,7 +336,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    //Classe Async (UnknownPoint)
+    //Classe GetAllUnknownPointsAsync
     private class GetAllUnknownPointsAsync extends AsyncTask<String,Void,ArrayList<UnknownPoint>>
     {
         @Override
@@ -374,7 +366,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    //Classe Async (Description)
+    //Classe GetAllDescriptionByInterestPointAsync
     private class GetAllDescriptionByInterestPointAsync extends AsyncTask<InterestPointWithVote,Void,ArrayList<DescriptionWithVote>>
     {
         @Override
@@ -396,7 +388,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    //Classe Async (VoteInterestPoint)
+    //Classe AddVoteInterestPointAsync
     private class AddVoteInterestPointAsync extends AsyncTask<VoteInterestPoint,Void,Integer>
     {
         @Override
@@ -424,7 +416,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
-    //Classe Async (User)
+    //Classe GetUserByIdAsync
     private class GetUserByIdAsync extends AsyncTask<String,Void,User>
     {
         @Override
@@ -445,7 +437,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         protected void onPostExecute(User user)
         {
             if(user == null){
-                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.user_not_find, Toast.LENGTH_SHORT).show();
             }
 
             userCurrent = user;

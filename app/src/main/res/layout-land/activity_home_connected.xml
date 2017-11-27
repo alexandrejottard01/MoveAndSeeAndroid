@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button_add_description"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@+id/average_interest"
+        android:text="+"
+        android:textSize="10sp" />
+
+    <TextView
+        android:id="@+id/average_interest"
+        android:layout_width="65dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/name_interest"
+        android:textSize="18sp" />
+
+    <ImageButton
+        android:id="@+id/thumb_down"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/name_interest"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/address_interest"
+        android:background="@drawable/ic_thumb_down_black_24dp" />
+
+    <TextView
+        android:id="@+id/name_interest"
+        android:layout_width="240dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/map"
+        android:text="@string/select_point"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/address_interest"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_interest"
+        android:layout_toRightOf="@+id/map" />
+
+    <ImageButton
+        android:id="@+id/thumb_up"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/name_interest"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/thumb_down"
+        android:background="@drawable/ic_thumb_up_black_24dp" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="300dp"
+        android:layout_height="match_parent" />
+
+    <ListView
+        android:id="@+id/list_description"
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/address_interest"
+        android:layout_toRightOf="@+id/map" />
+
+</RelativeLayout>
