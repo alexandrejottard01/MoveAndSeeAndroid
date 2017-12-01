@@ -138,11 +138,6 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
                 startActivity(goToProfile);
                 return true;
 
-            case R.id.action_create_interest_point :
-                Intent goToCreateInterestPoint = new Intent(CreateDescriptionOfUnknownPointActivity.this, CreateInterestPointActivity.class);
-                startActivity(goToCreateInterestPoint);
-                return true;
-
             case R.id.action_create_unknown_point :
                 Intent goToCreateUnknownPoint = new Intent(CreateDescriptionOfUnknownPointActivity.this, CreateUnknownPointActivity.class);
                 startActivity(goToCreateUnknownPoint);

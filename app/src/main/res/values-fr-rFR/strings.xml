@@ -34,4 +34,9 @@
     <string name="button_log_in">Se connecter</string>
     <string name="button_register">S\'inscrire</string>
     <string name="user_not_find">Utilisateur non trouvé</string>
+    <string name="service_not_available">Service non disponible</string>
+    <string name="registration_error">Erreur d\'inscription</string>
+    <string name="button_registration">Inscription</string>
+    <string name="username_or_password_fail">Pseudo ou mot de passe erroné</string>
+    <string name="error_login">Erreur de connexion</string>
 </resources>

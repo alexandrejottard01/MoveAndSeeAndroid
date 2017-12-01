@@ -14,11 +14,6 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_create_interest_point"
-        android:title="@string/menu_create_interest_point"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_create_unknown_point"
         android:title="@string/menu_create_unknown_point"
         app:showAsAction="never" />

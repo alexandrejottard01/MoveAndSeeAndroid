@@ -113,11 +113,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                 startActivity(goToProfile);
                 return true;
 
-            case R.id.action_create_interest_point:
-                Intent goToCreateInterestPoint = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
-                startActivity(goToCreateInterestPoint);
-                return true;
-
             case R.id.action_create_unknown_point:
                 Intent goToCreateUnknownPoint = new Intent(HomeConnectedActivity.this, CreateUnknownPointActivity.class);
                 startActivity(goToCreateUnknownPoint);
@@ -302,6 +297,11 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     public String getToken(){
         return token;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), R.string.back_not_available, Toast.LENGTH_SHORT).show();
     }
 
     //Classe GetAllInterestPointsAsync

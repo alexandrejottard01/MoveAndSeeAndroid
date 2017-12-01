@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.henallux.moveandseeandroid.Exception.HttpResultException;
 import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.Model.UserLogin;
 
@@ -35,8 +36,6 @@ public class LoginDAO {
         outputStream.flush();
         outputStream.close();
 
-        Log.i("norage",Integer.toString(connection.getResponseCode()));
-
         if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             StringBuilder stringBuilder = new StringBuilder();
@@ -50,6 +49,6 @@ public class LoginDAO {
             Log.i("Contenu inputJsonString", inputJsonString);
             return gson.fromJson(inputJsonString,AccessToken.class);
         }
-        return null;
+        throw new HttpResultException(connection.getResponseCode());
     }
 }

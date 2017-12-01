@@ -115,11 +115,6 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
                 startActivity(goToProfile);
                 return true;
 
-            case R.id.action_create_interest_point :
-                Intent goToCreateInterestPoint = new Intent(CreateUnknownPointActivity.this, CreateInterestPointActivity.class);
-                startActivity(goToCreateInterestPoint);
-                return true;
-
             case R.id.action_sign_out :
                 Intent goToHomeNotConnected = new Intent(CreateUnknownPointActivity.this, HomeNotConnectedActivity.class);
                 startActivity(goToHomeNotConnected);

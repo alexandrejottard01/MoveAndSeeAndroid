@@ -34,4 +34,9 @@
     <string name="confirmation_password">Confirmation password</string>
     <string name="registration_error">registration error</string>
     <string name="button_registration">Registration</string>
+    <string name="username_or_password_fail">Username or Password fail</string>
+    <string name="service_not_available">"Service not available "</string>
+    <string name="error_login">Error login</string>
+    <string name="user_not_find">User not found</string>
+    <string name="back_not_available">Back not available</string>
 </resources>

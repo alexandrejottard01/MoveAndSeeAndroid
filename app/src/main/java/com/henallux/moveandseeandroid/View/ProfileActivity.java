@@ -68,11 +68,6 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(goToHomeConnected);
                 return true;
 
-            case R.id.action_create_interest_point :
-                Intent goToCreateInterestPoint = new Intent(ProfileActivity.this, CreateInterestPointActivity.class);
-                startActivity(goToCreateInterestPoint);
-                return true;
-
             case R.id.action_create_unknown_point :
                 Intent goToCreateUnknownPoint = new Intent(ProfileActivity.this, CreateUnknownPointActivity.class);
                 startActivity(goToCreateUnknownPoint);

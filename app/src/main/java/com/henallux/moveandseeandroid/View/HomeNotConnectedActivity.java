@@ -6,26 +6,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.Marker;
-import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.LoginDAO;
-import com.henallux.moveandseeandroid.DAO.UserDAO;
+import com.henallux.moveandseeandroid.Exception.HttpResultException;
 import com.henallux.moveandseeandroid.Model.AccessToken;
-import com.henallux.moveandseeandroid.Model.InterestPointWithVote;
-import com.henallux.moveandseeandroid.Model.UnknownPoint;
-import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.Model.UserLogin;
 import com.henallux.moveandseeandroid.R;
 
-import java.util.HashMap;
+import java.net.HttpURLConnection;
 
 /**
  * Created by Alexandre on 14-11-17.
@@ -69,20 +61,22 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
         });
     }
 
-    private class UserLoginAsync extends AsyncTask<UserLogin, Void, AccessToken> {
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(getApplicationContext(), R.string.back_not_available, Toast.LENGTH_SHORT).show();
+    }
 
+    private class UserLoginAsync extends AsyncTask<UserLogin, Void, AccessToken> {
+        private int resultCode;
         @Override
         protected AccessToken doInBackground(UserLogin... params) {
             LoginDAO loginDAO = new LoginDAO();
             AccessToken token = null;
             try {
                 token = loginDAO.connexion(params[0]);
-                if(token == null){
-                    Toast.makeText(HomeNotConnectedActivity.this,"token null", Toast.LENGTH_SHORT).show();
-
-                }
-                Log.i("Contenu inputJsonString",  token.toString());
-            }catch (Exception e) {
+            }catch (HttpResultException e){
+                resultCode = e.getResultCode();
+            }catch (Exception e){
                 e.printStackTrace();
             }
             return token;
@@ -91,11 +85,6 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(AccessToken token){
             if(token != null){
-                /*Gson gson = new Gson();
-                String tokenConverted = gson.toJson(token);
-                Intent intentToHome = new Intent(HomeNotConnectedActivity.this, ProfileActivity.class);
-                intentToHome.putExtra("accessToken", tokenConverted);*/
-
                 preferences = PreferenceManager.getDefaultSharedPreferences(HomeNotConnectedActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("token",token.getToken());
@@ -104,10 +93,20 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
                 Intent intentToHomeConnected = new Intent(HomeNotConnectedActivity.this, HomeConnectedActivity.class);
                 startActivity(intentToHomeConnected);
             }else{
-                Toast.makeText(HomeNotConnectedActivity.this,"connexion Error", Toast.LENGTH_SHORT).show();
-            }
+                switch (resultCode){
+                    case HttpURLConnection.HTTP_UNAUTHORIZED:
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        Toast.makeText(HomeNotConnectedActivity.this, R.string.username_or_password_fail, Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case HttpURLConnection.HTTP_UNAVAILABLE:
+                        Toast.makeText(HomeNotConnectedActivity.this, R.string.service_not_available, Toast.LENGTH_SHORT).show();
+                        break;
+
+                    default:
+                        System.out.println(getString(R.string.error_login));
+                }
+           }
         }
     }
-
-
 }
