@@ -38,12 +38,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".View.CreateDescriptionOfInterestPointActivity" />
-        <activity android:name=".View.CreateDescriptionOfUnknownPointActivity" />
-        <activity android:name=".View.CreateInterestPointActivity" />
-        <activity android:name=".View.CreateUnknownPointActivity" />
+        <activity android:name=".View.CreateDescriptionOfInterestPointActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".View.CreateDescriptionOfUnknownPointActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".View.CreateInterestPointActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".View.CreateUnknownPointActivity" android:screenOrientation="portrait"/>
         <activity android:name=".View.HomeConnectedActivity" />
-        <activity android:name=".View.ProfileActivity" />
+        <activity android:name=".View.ProfileActivity" android:screenOrientation="portrait"/>
         <activity android:name=".View.RegistrationActivity" />
     </application>
 

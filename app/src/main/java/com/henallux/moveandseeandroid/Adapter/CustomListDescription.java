@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.UserDAO;
 import com.henallux.moveandseeandroid.DAO.VoteDescriptionDAO;
 import com.henallux.moveandseeandroid.DAO.VoteInterestPointDAO;
@@ -52,39 +53,66 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
 
         final DescriptionWithVote descriptionWithVote = getItem(position);
 
-        TextView textPseudo = (TextView) viewDescription.findViewById(R.id.title_pseudo_interest_point);
-        TextView textExplication = (TextView) viewDescription.findViewById(R.id.description);
-        TextView textAverage = (TextView) viewDescription.findViewById(R.id.rate);
+        TextView textPseudo = viewDescription.findViewById(R.id.title_pseudo_interest_point);
+        TextView textExplication = viewDescription.findViewById(R.id.description);
+        TextView textAverage = viewDescription.findViewById(R.id.rate);
 
 
 
-            textPseudo.setText(descriptionWithVote.description.idUserNavigation.userName);
-            textExplication.setText(descriptionWithVote.description.explication);
+        textPseudo.setText(descriptionWithVote.description.idUserNavigation.userName);
+        textExplication.setText(descriptionWithVote.description.explication);
 
-            if(descriptionWithVote.average != -1){
-                textAverage.setText(Integer.toString(descriptionWithVote.average) +"%");
-            }
+        if(descriptionWithVote.average != -1){
+            textAverage.setText(Integer.toString(descriptionWithVote.average) +"%");
+        }
 
 
         //Gestion du pouce positive
-        ImageButton addVotePositive = (ImageButton) viewDescription.findViewById(R.id.thumb_up);
+        ImageButton addVotePositive = viewDescription.findViewById(R.id.thumb_up);
         addVotePositive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-            VoteDescription voteDescriptionPositive = new VoteDescription(true,"898c5147-3b5c-44ad-a3c8-bd8393175c6a",descriptionWithVote.description.idDescription);
-            new AddVoteDescriptionAsync().execute(voteDescriptionPositive);
+                DescriptionWithVote descriptionWithVoteCurrent = null;
+                VoteDescription voteDescriptionPositive = new VoteDescription(true,homeConnectedActivity.getUserCurrent().id,descriptionWithVote.description.idDescription);
+                new AddVoteDescriptionAsync().execute(voteDescriptionPositive);
+
+                try{
+                    descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                TextView textAverage = viewDescription.findViewById(R.id.rate);
+
+
+                if(descriptionWithVoteCurrent != null && descriptionWithVoteCurrent.average != -1){
+                    textAverage.setText(Integer.toString(descriptionWithVoteCurrent.average) +"%");
+                }
             }
         });
 
         //Gestion du pouce négatif
-        ImageButton addVoteNegative = (ImageButton) viewDescription.findViewById(R.id.thumb_down);
+        ImageButton addVoteNegative = viewDescription.findViewById(R.id.thumb_down);
         addVoteNegative.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                VoteDescription voteDescriptionNegative = new VoteDescription(false,"898c5147-3b5c-44ad-a3c8-bd8393175c6a",descriptionWithVote.description.idDescription);
+                DescriptionWithVote descriptionWithVoteCurrent = null;
+                VoteDescription voteDescriptionNegative = new VoteDescription(false,homeConnectedActivity.getUserCurrent().id,descriptionWithVote.description.idDescription);
                 new AddVoteDescriptionAsync().execute(voteDescriptionNegative);
+
+                try{
+                    descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+                TextView textAverage = viewDescription.findViewById(R.id.rate);
+
+                if(descriptionWithVoteCurrent != null && descriptionWithVoteCurrent.average != -1){
+                    textAverage.setText(Integer.toString(descriptionWithVoteCurrent.average) +"%");
+                }
             }
         });
 
@@ -118,6 +146,32 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             }
             else{
                 Toast.makeText(getContext(), "Vote non enregistré", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //Classe GetDescriptionByIdAsync
+    private class GetDescriptionByIdAsync extends AsyncTask<Long,Void,DescriptionWithVote>
+    {
+        @Override
+        protected DescriptionWithVote doInBackground(Long... params) {
+            DescriptionWithVote descriptionWithVote;
+            DescriptionDAO descriptionDAO = new DescriptionDAO();
+
+            try{
+                descriptionWithVote = descriptionDAO.getDescriptionById(homeConnectedActivity.getToken(), params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                descriptionWithVote = null;
+            }
+            return descriptionWithVote;
+        }
+
+        @Override
+        protected void onPostExecute(DescriptionWithVote descriptionWithVote)
+        {
+            if(descriptionWithVote == null){
+                Toast.makeText(getContext(), R.string.description_not_found, Toast.LENGTH_SHORT).show();
             }
         }
     }

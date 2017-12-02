@@ -32,11 +32,19 @@
     <string name="button_register">Register</string>
     <string name="mot_de_passe">Password</string>
     <string name="confirmation_password">Confirmation password</string>
-    <string name="registration_error">registration error</string>
+    <string name="registration_error">The nickname must be between 3 and 12 characters, the password must be at least 8 characters long and the email address must be valid</string>
     <string name="button_registration">Registration</string>
     <string name="username_or_password_fail">Username or Password fail</string>
     <string name="service_not_available">"Service not available "</string>
     <string name="error_login">Error login</string>
     <string name="user_not_find">User not found</string>
     <string name="back_not_available">Back not available</string>
+    <string name="interest_point_not_found">Interest point not found</string>
+    <string name="description_not_found">Description not found</string>
+    <string name="different_passwords">different passwords</string>
+    <string name="username">Username :</string>
+    <string name="certified">Certified</string>
+    <string name="name_certified">"Name certified : "</string>
+    <string name="not_certified">Not certified</string>
+    <string name="email">"Mail : "</string>
 </resources>

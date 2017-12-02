@@ -1,6 +1,7 @@
 package com.henallux.moveandseeandroid.View;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -58,11 +59,12 @@ import java.util.List;
 
 public class HomeConnectedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
+    private InterestPointWithVote interestPointWithVoteCurrent;
     private User userCurrent;
     private SharedPreferences preferences;
     private String token;
     private GoogleMap map;
-    HashMap<Marker, InterestPointWithVote> hashMap = new HashMap();
+    HashMap<Marker, Long> hashMap = new HashMap();
     HashMap<Marker, UnknownPoint> hashMapUnknownPoint = new HashMap();
     private ListView listDescription;
 
@@ -178,38 +180,61 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
             goToCreateDescriptionOfUnknownPointActivity(unknownPoint);
         }
         else{
-            final InterestPointWithVote interestPointWithVote = hashMap.get(marker);
-            fillInterestPointInLayout(interestPointWithVote);
+            long idInterestPointSelected = hashMap.get(marker);
+
+            try{
+                interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointSelected).get();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+
+            fillInterestPointInLayout(interestPointWithVoteCurrent);
 
             //Gestion du bouton addDescription
-            Button addDescription = (Button) findViewById(R.id.button_add_description);
+            Button addDescription = findViewById(R.id.button_add_description);
             addDescription.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    goToCreateDescriptionOfInterestPointActivity(interestPointWithVote);
+                    goToCreateDescriptionOfInterestPointActivity(interestPointWithVoteCurrent);
                 }
             });
 
             //Gestion du pouce positive
-            ImageButton addVotePositive = (ImageButton) findViewById(R.id.thumb_up);
+            ImageButton addVotePositive = findViewById(R.id.thumb_up);
             addVotePositive.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,userCurrent.id,interestPointWithVote.interestPoint.idInterestPoint);
+                    long idInterestPointCurrent = interestPointWithVoteCurrent.interestPoint.idInterestPoint;
+                    VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,userCurrent.id,idInterestPointCurrent);
                     new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
+
+                    try{
+                        interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    fillAverageInterestPointInLayout(interestPointWithVoteCurrent);
                 }
             });
 
             //Gestion du pouce négatif
-            ImageButton addVoteNegative = (ImageButton) findViewById(R.id.thumb_down);
+            ImageButton addVoteNegative = findViewById(R.id.thumb_down);
             addVoteNegative.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
-                    VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,userCurrent.id,interestPointWithVote.interestPoint.idInterestPoint);
+                    long idInterestPointCurrent = interestPointWithVoteCurrent.interestPoint.idInterestPoint;
+                    VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,userCurrent.id,idInterestPointCurrent);
                     new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
+
+                    try{
+                        interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                    fillAverageInterestPointInLayout(interestPointWithVoteCurrent);
                 }
             });
         }
@@ -252,7 +277,6 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     private void fillAddressInterestPointInLayout(InterestPointWithVote interestPointWithVote){
         String stringAddress = findAddress(interestPointWithVote);
-
         TextView address;
         address = findViewById(R.id.address_interest);
         address.setText(stringAddress);
@@ -261,11 +285,13 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
     private String findAddress(InterestPointWithVote interestPointWithVote){
         Geocoder geocoder = new Geocoder(this);
         List<Address> listAddress = null;
+
         try {
             listAddress = geocoder.getFromLocation(interestPointWithVote.interestPoint.latitude, interestPointWithVote.interestPoint.longitude,1);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         Address addressInterestPoint = listAddress.get(0);
         String stringAddress = addressInterestPoint.getAddressLine(0);
 
@@ -297,6 +323,10 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
 
     public String getToken(){
         return token;
+    }
+
+    public User getUserCurrent() {
+        return userCurrent;
     }
 
     @Override
@@ -331,7 +361,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
                         .snippet(Integer.toString(item.average))
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
-                hashMap.put(marker, item);
+                hashMap.put(marker, item.interestPoint.idInterestPoint);
             }
         }
     }
@@ -407,10 +437,7 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         @Override
         protected void onPostExecute(Integer resultCode)
         {
-            if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), R.string.message_vote_recorded, Toast.LENGTH_SHORT).show();
-            }
-            else{
+            if(resultCode != HttpURLConnection.HTTP_OK){
                 Toast.makeText(getApplicationContext(), R.string.message_vote_not_recorded, Toast.LENGTH_SHORT).show();
             }
         }
@@ -444,4 +471,29 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         }
     }
 
+    //Classe GetInterestPointByIdAsync
+    private class GetInterestPointByIdAsync extends AsyncTask<Long,Void,InterestPointWithVote>
+    {
+        @Override
+        protected InterestPointWithVote doInBackground(Long... params) {
+            InterestPointWithVote interestPointWithVote;
+            InterestPointDAO interestPointDAO = new InterestPointDAO();
+
+            try{
+                interestPointWithVote = interestPointDAO.getInterestPointById(token, params[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+                interestPointWithVote = null;
+            }
+            return interestPointWithVote;
+        }
+
+        @Override
+        protected void onPostExecute(InterestPointWithVote interestPointWithVote)
+        {
+            if(interestPointWithVote == null){
+                Toast.makeText(getApplicationContext(), R.string.interest_point_not_found, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

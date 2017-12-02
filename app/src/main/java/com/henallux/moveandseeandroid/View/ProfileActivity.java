@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auth0.android.jwt.JWT;
@@ -37,6 +38,23 @@ public class ProfileActivity extends AppCompatActivity {
 
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
+
+        TextView pseudoTextView = findViewById(R.id.pseudo);
+        pseudoTextView.setText(getString(R.string.username) + pseudo);
+
+        TextView isCertifiedTextView = findViewById(R.id.isCertified);
+        TextView nameCertifiedTextView = findViewById(R.id.nameCertified);
+
+        if (userCurrent.isCertified) {
+            isCertifiedTextView.setText(R.string.certified);
+            nameCertifiedTextView.setText(getString(R.string.name_certified) + userCurrent.nameCertified);
+        }else{
+            isCertifiedTextView.setText(R.string.not_certified);
+            nameCertifiedTextView.setText("");
+        }
+
+        TextView emailTextView = findViewById(R.id.email);
+        emailTextView.setText(getString(R.string.email) + userCurrent.email);
     }
 
     private void setTokenInPreferences(){
@@ -45,7 +63,11 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void fillUserCurrentById(String idUser){
-        new GetUserByIdAsync().execute(idUser);
+        try{
+            userCurrent = new GetUserByIdAsync().execute(idUser).get();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private String getUsernameByToken(String token){
@@ -102,10 +124,8 @@ public class ProfileActivity extends AppCompatActivity {
         protected void onPostExecute(User user)
         {
             if(user == null){
-                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.user_not_find, Toast.LENGTH_SHORT).show();
             }
-
-            userCurrent = user;
         }
     }
 }

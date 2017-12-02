@@ -82,4 +82,32 @@ public class DescriptionDAO {
 
         return connection.getResponseCode();
     }
+
+    public DescriptionWithVote getDescriptionById(String token, long idDescription)throws Exception{
+
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+
+        URL url = new URL("http://moveandsee.azurewebsites.net/api/Description/GetDescriptionById/"+idDescription);
+        HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setDoInput(true);
+
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Execute
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputJsonString = "",line;
+
+        while((line = bufferedReader.readLine()) != null){
+            stringBuilder.append(line);
+        }
+        bufferedReader.close();
+        connection.disconnect();
+
+        inputJsonString = stringBuilder.toString();
+
+        DescriptionWithVote descriptionWithVote = gson.fromJson(inputJsonString,DescriptionWithVote.class);
+
+        return descriptionWithVote;
+    }
 }

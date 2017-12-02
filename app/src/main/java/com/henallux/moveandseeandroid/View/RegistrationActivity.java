@@ -53,7 +53,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     new UserRegisterAsync().execute(user);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Mots de passe différents", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.different_passwords, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -82,7 +82,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 Intent intentToHomeNotConnected = new Intent(RegistrationActivity.this, HomeNotConnectedActivity.class);
                 startActivity(intentToHomeNotConnected);
             }else{
-                Toast.makeText(RegistrationActivity.this, R.string.registration_error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegistrationActivity.this, R.string.registration_error, Toast.LENGTH_LONG).show();
             }
         }
     }

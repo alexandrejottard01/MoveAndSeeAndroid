@@ -35,8 +35,17 @@
     <string name="button_register">S\'inscrire</string>
     <string name="user_not_find">Utilisateur non trouvé</string>
     <string name="service_not_available">Service non disponible</string>
-    <string name="registration_error">Erreur d\'inscription</string>
+    <string name="registration_error">Le pseudo doit être compris entre 3 et 12 caractères, le mot de passe doit faire minimum 8 caractères et l\'adresse mail doit être valide</string>
     <string name="button_registration">Inscription</string>
     <string name="username_or_password_fail">Pseudo ou mot de passe erroné</string>
     <string name="error_login">Erreur de connexion</string>
+    <string name="back_not_available">Retour impossible</string>
+    <string name="interest_point_not_found">Point d\'intérêt non trouvé</string>
+    <string name="description_not_found">Description non trouvé</string>
+    <string name="different_passwords">Mots de passe différents</string>
+    <string name="certified">Certifié</string>
+    <string name="name_certified">Nom certifié :</string>
+    <string name="not_certified">Non certifié</string>
+    <string name="email">Email :</string>
+    <string name="username">"Pseudo : "</string>
 </resources>
