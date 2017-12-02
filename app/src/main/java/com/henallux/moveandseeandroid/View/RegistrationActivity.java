@@ -31,6 +31,10 @@ public class RegistrationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         setTitle(getString(R.string.title_registration));
 
+        clickButtonRegister();
+    }
+
+    private void clickButtonRegister() {
         Button register = findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener() {
 
@@ -55,9 +59,6 @@ public class RegistrationActivity extends AppCompatActivity {
                 else{
                     Toast.makeText(getApplicationContext(), R.string.different_passwords, Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
         });
     }

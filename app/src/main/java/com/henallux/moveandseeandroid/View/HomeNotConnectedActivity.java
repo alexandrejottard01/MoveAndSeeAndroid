@@ -24,16 +24,32 @@ import java.net.HttpURLConnection;
  */
 
 public class HomeNotConnectedActivity extends AppCompatActivity {
-    //Variable d'instance
+
     private SharedPreferences preferences;
 
-    //OnCreate
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_not_connected);
         setTitle(getString(R.string.title_home_not_connected));
 
+        clickButtonLogin();
+        clickButtonRegister();
+    }
+
+    private void clickButtonRegister() {
+        Button register = findViewById(R.id.toRegistration);
+        register.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intentToRegistration = new Intent(HomeNotConnectedActivity.this, RegistrationActivity.class);
+                startActivity(intentToRegistration);
+            }
+        });
+    }
+
+    private void clickButtonLogin() {
         Button login = findViewById(R.id.login);
         login.setOnClickListener(new View.OnClickListener() {
 
@@ -47,16 +63,6 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
 
                 UserLogin userLogin = new UserLogin(pseudo,password);
                 new UserLoginAsync().execute(userLogin);
-            }
-        });
-
-        Button register = findViewById(R.id.toRegistration);
-        register.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intentToRegistration = new Intent(HomeNotConnectedActivity.this, RegistrationActivity.class);
-                startActivity(intentToRegistration);
             }
         });
     }

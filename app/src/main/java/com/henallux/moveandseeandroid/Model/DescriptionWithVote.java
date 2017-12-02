@@ -21,14 +21,6 @@ public class DescriptionWithVote {
     public void setDescription(Description description) {
         this.description = description;
     }
-
-    public int getAverage() {
-        return average;
-    }
-
-    public void setAverage(int average) {
-        this.average = average;
-    }
 }
 
 

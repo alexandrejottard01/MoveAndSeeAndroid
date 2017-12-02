@@ -16,20 +16,4 @@ public class InterestPointWithVote {
         this.interestPoint = interestPoint;
         this.average = average;
     }
-
-    public InterestPoint getInterestPoint() {
-        return interestPoint;
-    }
-
-    public void setInterestPoint(InterestPoint interestPoint) {
-        this.interestPoint = interestPoint;
-    }
-
-    public int getAverage() {
-        return average;
-    }
-
-    public void setAverage(int average) {
-        this.average = average;
-    }
 }

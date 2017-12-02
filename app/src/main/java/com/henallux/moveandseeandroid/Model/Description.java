@@ -42,53 +42,11 @@ public class Description {
         this.idInterestPointNavigation = idInterestPointNavigation;
     }
 
-
-
-    public long getIdDescription() {
-        return idDescription;
-    }
-
-    public void setIdDescription(long idDescription) {
-        this.idDescription = idDescription;
-    }
-
-    public String getExplication() {
-        return explication;
-    }
-
-    public void setExplication(String explication) {
-        this.explication = explication;
-    }
-
     public String getIdUser() {
         return idUser;
     }
 
     public void setIdUser(String idUser) {
         this.idUser = idUser;
-    }
-
-    public long getIdInterestPoint() {
-        return idInterestPoint;
-    }
-
-    public void setIdInterestPoint(long idInterestPoint) {
-        this.idInterestPoint = idInterestPoint;
-    }
-
-    public InterestPoint getIdInterestPointNavigation() {
-        return idInterestPointNavigation;
-    }
-
-    public void setIdInterestPointNavigation(InterestPoint idInterestPointNavigation) {
-        this.idInterestPointNavigation = idInterestPointNavigation;
-    }
-
-    public User getIdUserNavigation() {
-        return idUserNavigation;
-    }
-
-    public void setIdUserNavigation(User idUserNavigation) {
-        this.idUserNavigation = idUserNavigation;
     }
 }

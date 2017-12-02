@@ -9,8 +9,6 @@ public class VoteInterestPoint {
     public boolean isPositiveAssessment;
     public String idUser;
     public long idInterestPoint;
-    public InterestPoint idInterestPointNavigation;
-    public User idUserNavigation;
 
     public VoteInterestPoint(boolean isPositiveAssessment, String idUser, long idInterestPoint) {
         this.isPositiveAssessment = isPositiveAssessment;

@@ -13,7 +13,6 @@ public class UnknownPoint {
     public double latitude;
     public double longitude;
     public Date dateCreation;
-    public User idUserNavigation;
 
     public UnknownPoint(String idUser, double latitude, double longitude, Date dateCreation) {
         this.idUser = idUser;
@@ -21,6 +20,4 @@ public class UnknownPoint {
         this.longitude = longitude;
         this.dateCreation = dateCreation;
     }
-
-
 }
