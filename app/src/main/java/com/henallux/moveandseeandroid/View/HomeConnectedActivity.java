@@ -7,11 +7,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,11 +28,13 @@ import android.widget.Toast;
 import com.auth0.android.jwt.JWT;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -57,7 +63,9 @@ import java.util.List;
  * Created by Alexandre on 14-11-17.
  */
 
-public class HomeConnectedActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class HomeConnectedActivity extends AppCompatActivity
+        implements OnMapReadyCallback,
+        GoogleMap.OnMarkerClickListener{
 
     private InterestPointWithVote interestPointWithVoteCurrent;
     private User userCurrent;
@@ -83,17 +91,17 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         fillUserCurrentByToken(token);
     }
 
-    private void setTokenInPreferences(){
+    private void setTokenInPreferences() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
-        token = preferences.getString("token",null);
+        token = preferences.getString("token", null);
     }
 
-    private void fillUserCurrentByToken(String token){
+    private void fillUserCurrentByToken(String token) {
         String pseudoUser = getUsernameByToken(token);
         new GetUserByPseudoAsync().execute(pseudoUser);
     }
 
-    private String getUsernameByToken(String token){
+    private String getUsernameByToken(String token) {
         JWT jwt = new JWT(token);
         return jwt.getSubject();
     }
@@ -132,9 +140,8 @@ public class HomeConnectedActivity extends AppCompatActivity implements OnMapRea
         displayInterestPoints();
         displayUnknownPoints();
 
-
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        goToLocationZoom(50.469424, 4.862533, 15);
+        //goToLocationZoom(50.469424, 4.862533, 15);
         googleMap.setOnMarkerClickListener(this);
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
