@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
-    android:background="@drawable/border_description">
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/title_pseudo_interest_point"
@@ -11,8 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:textColor="#000"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/description"
@@ -20,8 +18,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/title_pseudo_interest_point"
+        android:layout_marginLeft="8dp"
         android:maxEms="17"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/rate"

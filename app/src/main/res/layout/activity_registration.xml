@@ -1,74 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#DAE2EA">
 
     <EditText
         android:id="@+id/pseudo"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="false"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="100dp"
         android:hint="@string/pseudo"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:backgroundTint="#072F56"
+        android:textColorHint="#8DA3B9"/>
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pseudo"
-        android:layout_centerHorizontal="false"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:hint="@string/mail"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:backgroundTint="#072F56"
+        android:textColorHint="#8DA3B9"/>
 
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/pseudo"
         android:layout_alignStart="@+id/pseudo"
         android:layout_below="@+id/email"
-        android:layout_centerHorizontal="false"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:hint="@string/mot_de_passe"
         android:inputType="textPassword"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:backgroundTint="#072F56"
+        android:textColorHint="#8DA3B9"/>
 
     <EditText
         android:id="@+id/confirmation_password"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/pseudo"
         android:layout_alignStart="@+id/pseudo"
         android:layout_below="@+id/password"
-        android:layout_centerHorizontal="false"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="5dp"
         android:hint="@string/confirmation_password"
         android:inputType="textPassword"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:backgroundTint="#072F56"
+        android:textColorHint="#8DA3B9"/>
 
     <Button
         android:id="@+id/register"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
         android:layout_below="@+id/confirmation_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
+        android:background="@drawable/design_button"
         android:gravity="center_horizontal|center"
-        android:text="@string/button_register" />
+        android:text="@string/button_register"
+        android:textColor="@android:color/white"
+        android:textSize="10sp" />
 
 
 

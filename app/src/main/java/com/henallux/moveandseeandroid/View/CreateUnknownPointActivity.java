@@ -2,6 +2,8 @@ package com.henallux.moveandseeandroid.View;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -31,9 +33,11 @@ import com.henallux.moveandseeandroid.Model.UnknownPoint;
 import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.R;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Alexandre on 14-11-17.
@@ -137,10 +141,23 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
             @Override
             public void onMapClick(LatLng point) {
 
-                //Latitude et Longitude du UnknownPoint
-                TextView latitudeLongitudeUnknownPointTextView;
-                latitudeLongitudeUnknownPointTextView =(TextView)findViewById(R.id.latitude_longitude_unknown_point);
-                latitudeLongitudeUnknownPointTextView.setText(Double.toString(point.latitude) + " ; " + Double.toString(point.longitude));
+                //Adresse du UnknownPoint
+                TextView addressTextView;
+                addressTextView = findViewById(R.id.address_unknown_point);
+
+                Geocoder geocoder = new Geocoder(CreateUnknownPointActivity.this);
+                List<Address> listAddress = null;
+
+                try {
+                    listAddress = geocoder.getFromLocation(point.latitude, point.longitude,1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Address addressInterestPoint = listAddress.get(0);
+                String stringAddress = addressInterestPoint.getAddressLine(0);
+
+                addressTextView.setText(stringAddress);
 
                 latitudeLongitude = new LatLng(point.latitude,point.longitude);
             }

@@ -141,11 +141,8 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
         @Override
         protected void onPostExecute(Integer resultCode)
         {
-            if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getContext(), "Vote enregistré", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(getContext(), "Vote non enregistré", Toast.LENGTH_SHORT).show();
+            if(resultCode != HttpURLConnection.HTTP_OK){
+                Toast.makeText(getContext(), R.string.message_vote_not_recorded, Toast.LENGTH_SHORT).show();
             }
         }
     }

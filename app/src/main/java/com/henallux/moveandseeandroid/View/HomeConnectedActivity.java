@@ -141,7 +141,7 @@ public class HomeConnectedActivity extends AppCompatActivity
         displayUnknownPoints();
 
         map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-        //goToLocationZoom(50.469424, 4.862533, 15);
+        goToLocationZoom(50.469424, 4.862533, 15);
         googleMap.setOnMarkerClickListener(this);
 
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -202,7 +202,7 @@ public class HomeConnectedActivity extends AppCompatActivity
 
     private void clickButtonAddDescription() {
         Button addDescription = findViewById(R.id.button_add_description);
-        addDescription.setOnClickListener(new View.OnClickListener() {
+            addDescription.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {

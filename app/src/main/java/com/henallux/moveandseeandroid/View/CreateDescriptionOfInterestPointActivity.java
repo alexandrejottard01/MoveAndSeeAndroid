@@ -66,16 +66,20 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         interestPointWithVote = gson.fromJson(stringInterestPoint, InterestPointWithVote.class);
 
         //Nom du InterestPoint
-        TextView nameInterest = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.name_interest_point);
+        TextView nameInterest = findViewById(R.id.name_interest);
+        nameInterest.setText(interestPointWithVote.interestPoint.name);
 
         //Moyenne du InterestPoint
-        if(interestPointWithVote.average != -1){
-            nameInterest.setText(interestPointWithVote.interestPoint.name + " " + Integer.toString(interestPointWithVote.average)+"%");
+        TextView average = findViewById(R.id.average_interest);
+
+        if(interestPointWithVote.average != -1) {
+            average.setText(Integer.toString(interestPointWithVote.average) + "%");
         }
         else{
-            nameInterest.setText(interestPointWithVote.interestPoint.name);
+            average.setText(" ");
         }
+
+
 
         //Adresse du InterestPoint
         Geocoder geocoder = new Geocoder(this);
@@ -88,16 +92,15 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         Address addressInterestPoint = listAddress.get(0);
         String stringAddress = addressInterestPoint.getAddressLine(0);
 
-        TextView address = new TextView(this);
-        nameInterest =(TextView)findViewById(R.id.address_interest);
-        nameInterest.setText(stringAddress);
+        TextView address = findViewById(R.id.address_interest);
+        address.setText(stringAddress);
 
         //Boutton Submit description
-        Button addDescription = (Button) findViewById(R.id.button_submit_description);
+        Button addDescription = findViewById(R.id.button_submit_description);
         addDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            EditText explicationEditText = (EditText) findViewById (R.id.explication_interest);
+            EditText explicationEditText = findViewById (R.id.explication_interest);
             String explication = explicationEditText.getText().toString();
 
             long idInterestPoint = interestPointWithVote.interestPoint.idInterestPoint;
