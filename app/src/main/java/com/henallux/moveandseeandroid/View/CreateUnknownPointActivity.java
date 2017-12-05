@@ -22,7 +22,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.henallux.moveandseeandroid.DAO.DescriptionDAO;
@@ -51,6 +53,7 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
     private String token;
     private GoogleMap map;
     private LatLng latitudeLongitude;
+    private Marker marker;
 
     //OnCreate
     @Override
@@ -141,6 +144,12 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
             @Override
             public void onMapClick(LatLng point) {
 
+
+                if(marker != null){
+                    marker.remove();
+                }
+                marker = null;
+
                 //Adresse du UnknownPoint
                 TextView addressTextView;
                 addressTextView = findViewById(R.id.address_unknown_point);
@@ -158,6 +167,10 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
                 String stringAddress = addressInterestPoint.getAddressLine(0);
 
                 addressTextView.setText(stringAddress);
+
+                marker = map.addMarker(new MarkerOptions()
+                                .position(new LatLng(point.latitude, point.longitude))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
                 latitudeLongitude = new LatLng(point.latitude,point.longitude);
             }

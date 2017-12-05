@@ -65,7 +65,7 @@ import java.util.List;
 
 public class HomeConnectedActivity extends AppCompatActivity
         implements OnMapReadyCallback,
-        GoogleMap.OnMarkerClickListener{
+        GoogleMap.OnMarkerClickListener {
 
     private InterestPointWithVote interestPointWithVoteCurrent;
     private User userCurrent;
@@ -152,6 +152,7 @@ public class HomeConnectedActivity extends AppCompatActivity
                 goToCreateInterestPointActivity(latitudeLongitude);
             }
         });
+
     }
 
     private void displayInterestPoints(){
