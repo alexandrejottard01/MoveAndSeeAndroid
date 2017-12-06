@@ -36,7 +36,9 @@
         android:layout_height="20dp"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/rate"
-        android:background="@drawable/ic_thumb_up_black_24dp" />
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/ic_thumb_up_black_24dp"
+        android:backgroundTint="@color/colorDarkBlue" />
 
     <ImageButton
         android:id="@+id/thumb_down"
@@ -46,6 +48,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="5dp"
         android:layout_toLeftOf="@+id/thumb_up"
-        android:background="@drawable/ic_thumb_down_black_24dp" />
+        android:background="@drawable/ic_thumb_down_black_24dp"
+        android:backgroundTint="@color/colorDarkBlue"/>
 
 </RelativeLayout>

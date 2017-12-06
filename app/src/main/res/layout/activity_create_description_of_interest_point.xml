@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DAE2EA">
+    android:background="@color/colorLightBlue">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/name_interest"
             android:layout_centerHorizontal="true"
-            android:textColor="#072F56"/>
+            android:textColor="@color/colorDarkBlue"/>
 
         <TextView
             android:id="@+id/name_interest"
@@ -33,7 +33,7 @@
             android:text="@string/select_point"
             android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#072F56"/>
+            android:textColor="@color/colorDarkBlue"/>
 
         <TextView
             android:id="@+id/average_interest"
@@ -43,7 +43,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:textSize="18sp"
-            android:textColor="#072F56"/>
+            android:textColor="@color/colorDarkBlue"/>
 
         <EditText
             android:id="@+id/explication_interest"
@@ -53,8 +53,9 @@
             android:layout_margin="10dp"
             android:background="@drawable/border_add_description"
             android:ems="10"
-            android:gravity="top"
-            android:inputType="textPersonName" />
+            android:inputType="textMultiLine"
+            android:textAlignment="textStart"
+            android:textColorHint="@color/colorLightGrayBlue" />
 
         <Button
             android:id="@+id/button_submit_description"

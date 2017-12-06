@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.henallux.moveandseeandroid.DAO.LoginDAO;
@@ -73,9 +74,17 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
     }
 
     private class UserLoginAsync extends AsyncTask<UserLogin, Void, AccessToken> {
+        private ProgressBar progressBar = findViewById(R.id.progressBar);
         private int resultCode;
+
         @Override
-        protected AccessToken doInBackground(UserLogin... params) {
+        protected void onPreExecute() {
+            progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected AccessToken doInBackground(UserLogin... params)
+        {
             LoginDAO loginDAO = new LoginDAO();
             AccessToken token = null;
             try {
@@ -113,6 +122,7 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
                         System.out.println(getString(R.string.error_login));
                 }
            }
+           progressBar.setVisibility(View.GONE);
         }
     }
 }

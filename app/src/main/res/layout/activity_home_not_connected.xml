@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DAE2EA">
+    android:background="@color/colorLightBlue">
 
     <EditText
         android:id="@+id/pseudo"
@@ -15,11 +15,12 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="25dp"
-        android:backgroundTint="#072F56"
+        android:backgroundTint="@color/colorDarkBlue"
         android:textColorHint="#8DA3B9"
         android:ems="10"
         android:hint="@string/pseudo"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:inputType="textPersonName"/>
 
     <EditText
         android:id="@+id/password"
@@ -31,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginRight="20dp"
         android:layout_marginTop="1dp"
-        android:backgroundTint="#072F56"
+        android:backgroundTint="@color/colorDarkBlue"
         android:hint="@string/mot_de_passe"
         android:inputType="textPassword"
         android:textAlignment="center"
@@ -72,5 +73,15 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="40dp"
         app:srcCompat="@drawable/logo_move_and_see" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone" />
 
 </RelativeLayout>

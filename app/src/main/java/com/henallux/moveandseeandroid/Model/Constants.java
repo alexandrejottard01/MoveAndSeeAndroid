@@ -6,4 +6,5 @@ package com.henallux.moveandseeandroid.Model;
 
 public class Constants {
     public static final String ADDRESS_API = "http://moveandsee.azurewebsites.net/api/";
+    public static final String COLOR_BACKGROUND = "#DAE2EA";
 }

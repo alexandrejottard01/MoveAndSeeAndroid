@@ -184,6 +184,7 @@ public class HomeConnectedActivity extends AppCompatActivity
             goToCreateDescriptionOfUnknownPointActivity(unknownPoint);
         }
         else{
+
             long idInterestPointSelected = hashMap.get(marker);
 
             try{
@@ -210,6 +211,7 @@ public class HomeConnectedActivity extends AppCompatActivity
                 goToCreateDescriptionOfInterestPointActivity(interestPointWithVoteCurrent);
             }
         });
+        addDescription.setVisibility(View.VISIBLE);
     }
 
     private void clickButtonVoteNegativeInterestPoint() {
@@ -231,6 +233,7 @@ public class HomeConnectedActivity extends AppCompatActivity
                 fillAverageInterestPointInLayout(interestPointWithVoteCurrent);
             }
         });
+        addVoteNegative.setVisibility(View.VISIBLE);
     }
 
     private void clickButtonAddVotePositiveInterestPoint() {
@@ -251,6 +254,7 @@ public class HomeConnectedActivity extends AppCompatActivity
                 fillAverageInterestPointInLayout(interestPointWithVoteCurrent);
             }
         });
+        addVotePositive.setVisibility(View.VISIBLE);
     }
 
     private void goToCreateDescriptionOfInterestPointActivity(InterestPointWithVote interestPointWithVote){

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DAE2EA">
+    android:background="@color/colorLightBlue">
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
@@ -16,32 +16,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_below="@+id/average_interest">
+                android:layout_below="@+id/average_interest"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:id="@+id/relativeLayout">
 
                 <ImageButton
                     android:id="@+id/thumb_down"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-
-                    android:layout_marginLeft="159dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginRight="5dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/ic_thumb_down_black_24dp" />
+                    android:background="@drawable/ic_thumb_down_black_24dp"
+                    android:visibility="gone"
+                    android:backgroundTint="@color/colorDarkBlue"/>
 
                 <ImageButton
                     android:id="@+id/thumb_up"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="4dp"
+                    android:layout_marginLeft="5dp"
                     android:layout_marginTop="4dp"
                     android:layout_toRightOf="@+id/thumb_down"
-                    android:background="@drawable/ic_thumb_up_black_24dp" />
+                    android:background="@drawable/ic_thumb_up_black_24dp"
+                    android:visibility="gone"
+                    android:backgroundTint="@color/colorDarkBlue"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
             <TextView
@@ -50,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name_interest"
                 android:layout_centerHorizontal="true"
-                android:textColor="#072F56"/>
+                android:textColorLink="@color/cast_expanded_controller_background_color"/>
 
             <TextView
                 android:id="@+id/name_interest"
@@ -58,11 +62,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:text="@string/select_point"
+                android:textColor="@color/colorDarkBlue"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="#072F56"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/average_interest"
@@ -72,7 +76,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
                 android:textSize="18sp"
-                android:textColor="#072F56"/>
+                android:textColor="@color/colorDarkBlue"/>
 
             <Button
                 android:id="@+id/button_add_description"
@@ -83,14 +87,16 @@
                 android:layout_marginRight="5dp"
                 android:background="@drawable/design_button"
                 android:text="+"
-                android:textSize="10sp" />
+                android:textSize="10sp"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 
     <ListView
+        android:id="@+id/list_description"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_row="3"
-        android:id="@+id/list_description"/>
+        android:layout_marginTop="5dp"
+        android:layout_row="3" />
 
 </LinearLayout>

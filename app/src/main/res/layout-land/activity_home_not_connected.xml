@@ -2,52 +2,73 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#DAE2EA">
+    android:background="@color/colorLightBlue">
 
     <EditText
         android:id="@+id/pseudo"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="false"
-        android:layout_marginBottom="5dp"
-        android:layout_marginLeft="150dp"
-        android:layout_marginRight="150dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="40dp"
+        android:backgroundTint="@color/colorDarkBlue"
+        android:ems="10"
         android:hint="@string/pseudo"
-        android:textAlignment="center" />
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColorHint="#8DA3B9" />
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/pseudo"
-        android:layout_alignRight="@+id/pseudo"
+        android:layout_alignLeft="@+id/pseudo"
+        android:layout_alignStart="@+id/pseudo"
         android:layout_below="@+id/pseudo"
-        android:layout_marginLeft="150dp"
-        android:layout_marginRight="0dp"
+        android:backgroundTint="@color/colorDarkBlue"
         android:hint="@string/mot_de_passe"
         android:inputType="textPassword"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColorHint="#8DA3B9" />
 
     <Button
         android:id="@+id/login"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pseudo"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_below="@+id/password"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/design_button"
         android:gravity="center_horizontal|center"
-        android:text="@string/button_log_in" />
+        android:text="@string/button_log_in"
+        android:textColor="@android:color/white"
+        android:textSize="10sp" />
 
     <Button
         android:id="@+id/toRegistration"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignLeft="@+id/login"
+        android:layout_alignStart="@+id/login"
         android:layout_below="@+id/login"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/design_button"
         android:gravity="center_horizontal|center"
-        android:text="@string/button_registration" />
+        android:text="@string/button_registration"
+        android:textColor="@android:color/white"
+        android:textSize="10sp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_below="@+id/toRegistration"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:visibility="gone" />
 
 </RelativeLayout>
