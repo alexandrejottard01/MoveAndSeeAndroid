@@ -3,6 +3,10 @@
     <color name="colorLightBlue">#DAE2EA</color>
     <color name="colorDarkBlue">#072F56</color>
     <color name="colorLightGrayBlue">#8DA3B9</color>
+    <color name="colorUpButton">#7A9CBF</color>
+    <color name="colorBottomButton">#8CB3DB</color>
+    <color name="colorUpButtonCha">#ED7C2F</color>
+    <color name="colorBottomButtonCha">#FBBA4A</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#072F56</color>
