@@ -112,6 +112,9 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
                 if(connectionInternetAvailable()){
                     new AddDecriptionAsync().execute(description);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -128,6 +131,9 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
     private void fillUserCurrentById(String idUser){
         if(connectionInternetAvailable()){
             new GetUserByIdAsync().execute(idUser);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -256,7 +262,7 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         protected void onPostExecute(User user)
         {
             if(user == null){
-                Toast.makeText(getApplicationContext(), "User non trouvé", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.user_not_found, Toast.LENGTH_SHORT).show();
             }
 
             userCurrent = user;

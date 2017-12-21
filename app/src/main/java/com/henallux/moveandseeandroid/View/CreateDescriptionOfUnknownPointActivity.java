@@ -96,6 +96,9 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
                 if(connectionInternetAvailable()){
                     new DeleteUnknownPointAndAddInterestPointAsync().execute(description,idUnknownPoint);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -113,6 +116,9 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
     private void fillUserCurrentById(String idUser){
         if(connectionInternetAvailable()){
             new GetUserByIdAsync().execute(idUser);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -60,6 +60,9 @@ public class RegistrationActivity extends AppCompatActivity {
                     if(connectionInternetAvailable()){
                         new UserRegisterAsync().execute(user);
                     }
+                    else{
+                        Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), R.string.different_passwords, Toast.LENGTH_SHORT).show();

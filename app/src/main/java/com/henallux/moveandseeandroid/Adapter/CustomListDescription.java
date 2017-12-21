@@ -2,6 +2,8 @@ package com.henallux.moveandseeandroid.Adapter;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -74,10 +76,21 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
 
                 DescriptionWithVote descriptionWithVoteCurrent = null;
                 VoteDescription voteDescriptionPositive = new VoteDescription(true,homeConnectedActivity.getUserCurrent().id,descriptionWithVote.description.idDescription);
-                new AddVoteDescriptionAsync().execute(voteDescriptionPositive);
+                if(connectionInternetAvailable()){
+                    new AddVoteDescriptionAsync().execute(voteDescriptionPositive);
+                }
+                else{
+                    Toast.makeText(homeConnectedActivity, R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
+
 
                 try{
-                    descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                    if(connectionInternetAvailable()){
+                        descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                    }
+                    else{
+                        Toast.makeText(homeConnectedActivity, R.string.not_internet, Toast.LENGTH_SHORT).show();
+                    }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -99,10 +112,21 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
 
                 DescriptionWithVote descriptionWithVoteCurrent = null;
                 VoteDescription voteDescriptionNegative = new VoteDescription(false,homeConnectedActivity.getUserCurrent().id,descriptionWithVote.description.idDescription);
-                new AddVoteDescriptionAsync().execute(voteDescriptionNegative);
+                if(connectionInternetAvailable()){
+                    new AddVoteDescriptionAsync().execute(voteDescriptionNegative);
+                }
+                else{
+                    Toast.makeText(homeConnectedActivity, R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
+
 
                 try{
-                    descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                    if(connectionInternetAvailable()){
+                        descriptionWithVoteCurrent = new GetDescriptionByIdAsync().execute(descriptionWithVote.description.idDescription).get();
+                    }
+                    else{
+                        Toast.makeText(homeConnectedActivity, R.string.not_internet, Toast.LENGTH_SHORT).show();
+                    }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -115,10 +139,13 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
             }
         });
 
-
-
         return viewDescription;
+    }
 
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)homeConnectedActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     //Classe Async (VoteInterestPoint)

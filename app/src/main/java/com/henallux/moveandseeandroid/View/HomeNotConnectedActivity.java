@@ -69,6 +69,9 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
                 if(connectionInternetAvailable()){
                     new UserLoginAsync().execute(userLogin);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

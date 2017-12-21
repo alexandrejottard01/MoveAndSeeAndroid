@@ -94,6 +94,9 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
                 if(connectionInternetAvailable()){
                     new AddInterestPointAndDescriptionAsync().execute(description);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -111,6 +114,9 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
     private void fillUserCurrentById(String idUser){
         if(connectionInternetAvailable()){
             new GetUserByIdAsync().execute(idUser);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
         }
     }
 

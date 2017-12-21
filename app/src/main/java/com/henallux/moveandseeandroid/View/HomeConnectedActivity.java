@@ -103,6 +103,9 @@ public class HomeConnectedActivity extends AppCompatActivity
         if(connectionInternetAvailable()){
             new GetUserByPseudoAsync().execute(pseudoUser);
         }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String getUsernameByToken(String token) {
@@ -164,6 +167,9 @@ public class HomeConnectedActivity extends AppCompatActivity
             if(connectionInternetAvailable()){
                 new GetAllInterestPointsAsync().execute();
             }
+            else{
+                Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -173,6 +179,9 @@ public class HomeConnectedActivity extends AppCompatActivity
         try {
             if(connectionInternetAvailable()){
                 new GetAllUnknownPointsAsync().execute();
+            }
+            else{
+                Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,6 +207,9 @@ public class HomeConnectedActivity extends AppCompatActivity
             try{
                 if(connectionInternetAvailable()){
                     interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointSelected).get();
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
                 }
             }catch(Exception e){
                 e.printStackTrace();
@@ -235,10 +247,16 @@ public class HomeConnectedActivity extends AppCompatActivity
                 if(connectionInternetAvailable()){
                     new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
 
                 try{
                     if(connectionInternetAvailable()){
                         interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
                     }
                 }catch(Exception e){
                     e.printStackTrace();
@@ -261,11 +279,17 @@ public class HomeConnectedActivity extends AppCompatActivity
                 if(connectionInternetAvailable()){
                     new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
 
 
                 try{
                     if(connectionInternetAvailable()){
                         interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
                     }
                 }catch(Exception e){
                     e.printStackTrace();
@@ -277,24 +301,39 @@ public class HomeConnectedActivity extends AppCompatActivity
     }
 
     private void goToCreateDescriptionOfInterestPointActivity(InterestPointWithVote interestPointWithVote){
-        Gson gson = new Gson();
-        Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
-        intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
-        startActivity(intentToCreateDescriptionOfInterestPoint);
+        if(connectionInternetAvailable()){
+            Gson gson = new Gson();
+            Intent intentToCreateDescriptionOfInterestPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfInterestPointActivity.class);
+            intentToCreateDescriptionOfInterestPoint.putExtra("interestPointSelected", gson.toJson(interestPointWithVote));
+            startActivity(intentToCreateDescriptionOfInterestPoint);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void goToCreateDescriptionOfUnknownPointActivity(UnknownPoint unknownPoint){
-        Gson gson = new Gson();
-        Intent intentCreateDescriptionOfUnknownPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfUnknownPointActivity.class);
-        intentCreateDescriptionOfUnknownPoint.putExtra("unknownPointSelected", gson.toJson(unknownPoint));
-        startActivity(intentCreateDescriptionOfUnknownPoint);
+        if(connectionInternetAvailable()){
+            Gson gson = new Gson();
+            Intent intentCreateDescriptionOfUnknownPoint = new Intent(HomeConnectedActivity.this, CreateDescriptionOfUnknownPointActivity.class);
+            intentCreateDescriptionOfUnknownPoint.putExtra("unknownPointSelected", gson.toJson(unknownPoint));
+            startActivity(intentCreateDescriptionOfUnknownPoint);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void goToCreateInterestPointActivity(LatLng latitudeLongitude){
-        Gson gson = new Gson();
-        Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
-        intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
-        startActivity(intentToCreateInterestPointActivity);
+        if(connectionInternetAvailable()){
+            Gson gson = new Gson();
+            Intent intentToCreateInterestPointActivity = new Intent(HomeConnectedActivity.this, CreateInterestPointActivity.class);
+            intentToCreateInterestPointActivity.putExtra("latitudeLongitudeSelected", gson.toJson(latitudeLongitude));
+            startActivity(intentToCreateInterestPointActivity);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void fillInterestPointInLayout(InterestPointWithVote interestPointWithVote){
@@ -349,6 +388,9 @@ public class HomeConnectedActivity extends AppCompatActivity
         listDescription = findViewById(R.id.list_description);
         if(connectionInternetAvailable()){
             new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
         }
     }
 

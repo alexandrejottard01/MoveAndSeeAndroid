@@ -47,4 +47,5 @@
     <string name="name_certified">"Name certified : "</string>
     <string name="not_certified">Not certified</string>
     <string name="email">"Mail : "</string>
+    <string name="not_internet">Not connection internet</string>
 </resources>

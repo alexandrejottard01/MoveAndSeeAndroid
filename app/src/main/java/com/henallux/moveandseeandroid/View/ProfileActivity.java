@@ -70,6 +70,9 @@ public class ProfileActivity extends AppCompatActivity {
             if(connectionInternetAvailable()){
                 userCurrent = new GetUserByIdAsync().execute(idUser).get();
             }
+            else{
+                Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+            }
         }catch(Exception e){
             e.printStackTrace();
         }

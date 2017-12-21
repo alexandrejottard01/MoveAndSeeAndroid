@@ -83,6 +83,9 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
                 if(connectionInternetAvailable()){
                     new AddUnknownPointAsync().execute(unknownPoint);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                }
             }
         });
         setTokenInPreferences();
@@ -99,6 +102,9 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
     private void fillUserCurrentById(String idUser){
         if(connectionInternetAvailable()){
             new GetUserByIdAsync().execute(idUser);
+        }
+        else{
+            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
         }
     }
 
