@@ -10,7 +10,6 @@ public class HttpResultException extends Exception {
     public HttpResultException(int resultCode) {
         this.resultCode = resultCode;
     }
-
     public int getResultCode() {
         return resultCode;
     }

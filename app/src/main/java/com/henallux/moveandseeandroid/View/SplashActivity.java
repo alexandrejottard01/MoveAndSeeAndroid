@@ -18,39 +18,12 @@ import com.henallux.moveandseeandroid.R;
  */
 
 public class SplashActivity extends AppCompatActivity {
-    /*private ImageView image;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_screen);
-        image = findViewById(R.id.logo_move_and_see);
-        Animation myAnim = AnimationUtils.loadAnimation(this,R.anim.anim_startup);
-        image.startAnimation(myAnim);
-
-        Thread timer = new Thread(){
-            public void run(){
-                try{
-                    sleep(2000);
-                }catch (InterruptedException e){
-                    e.printStackTrace();
-                }
-                finally {
-                    Intent intentToLogin = new Intent(SplashActivity.this, HomeNotConnectedActivity.class);
-                    startActivity(intentToLogin);
-                    finish();
-                }
-            }
-        };
-        timer.start();
-    }*/
-
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         Window window = getWindow();
         window.setFormat(PixelFormat.RGBA_8888);
     }
-    /** Called when the activity is first created. */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +59,5 @@ public class SplashActivity extends AppCompatActivity {
         ImageView iv = findViewById(R.id.logo_move_and_see);
         iv.clearAnimation();
         iv.startAnimation(anim);
-
-
-
     }
 }

@@ -41,12 +41,4 @@ public class Description {
         this.idUser = idUser;
         this.idInterestPointNavigation = idInterestPointNavigation;
     }
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
 }
