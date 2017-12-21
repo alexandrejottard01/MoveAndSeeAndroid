@@ -1,7 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -64,7 +67,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void fillUserCurrentById(String idUser){
         try{
-            userCurrent = new GetUserByIdAsync().execute(idUser).get();
+            if(connectionInternetAvailable()){
+                userCurrent = new GetUserByIdAsync().execute(idUser).get();
+            }
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -101,6 +106,12 @@ public class ProfileActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     //Classe Async (User)

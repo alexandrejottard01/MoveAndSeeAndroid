@@ -9,14 +9,10 @@ import java.util.Date;
  * Created by Alexandre on 14-11-17.
  */
 
-public class InterestPoint {
+public class InterestPoint extends Point{
 
     public long idInterestPoint;
-    public String idUser;
-    public double latitude;
-    public double longitude;
     public String name;
-    public Date dateCreation;
     public User idUserNavigation;
 
     public InterestPoint(long idInterestPoint, String idUser, double latitude, double longitude, String name, Date dateCreation, User idUserNavigation) {

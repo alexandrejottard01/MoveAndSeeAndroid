@@ -1,7 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -66,13 +69,13 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
         unknownPoint = gson.fromJson(stringUnknownPoint, UnknownPoint.class);
 
         //Bouton Submit InterestPoint
-        Button addInterestPoint = (Button) findViewById(R.id.button_submit_interest_point);
+        Button addInterestPoint = findViewById(R.id.button_submit_interest_point);
         addInterestPoint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 //Création de InterestPoint
-                EditText nameInterestPointEditText = (EditText) findViewById (R.id.name_interest_point);
+                EditText nameInterestPointEditText = findViewById (R.id.name_interest_point);
                 String nameInterestPoint = nameInterestPointEditText.getText().toString();
 
                 double latitude = unknownPoint.latitude;
@@ -83,17 +86,16 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
                 InterestPoint interestPoint = new InterestPoint(userCurrent.id,latitude,longitude,nameInterestPoint, date);
 
                 //Création de Description
-                EditText descriptionInterestPointEditText = (EditText) findViewById (R.id.explication_interest);
+                EditText descriptionInterestPointEditText = findViewById (R.id.explication_interest);
                 String descriptionInterestPoint = descriptionInterestPointEditText.getText().toString();
 
                 Description description = new Description(descriptionInterestPoint, userCurrent.id, interestPoint);
 
                 long idUnknownPoint = unknownPoint.idUnknownPoint;
 
-
-
-                new DeleteUnknownPointAndAddInterestPointAsync().execute(description,idUnknownPoint);
-
+                if(connectionInternetAvailable()){
+                    new DeleteUnknownPointAndAddInterestPointAsync().execute(description,idUnknownPoint);
+                }
             }
         });
 
@@ -109,7 +111,9 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
     }
 
     private void fillUserCurrentById(String idUser){
-        new GetUserByIdAsync().execute(idUser);
+        if(connectionInternetAvailable()){
+            new GetUserByIdAsync().execute(idUser);
+        }
     }
 
     private String getUsernameByToken(String token){
@@ -176,51 +180,13 @@ public class CreateDescriptionOfUnknownPointActivity extends AppCompatActivity i
         map.moveCamera(update);
     }
 
-    //Classe DeleteUnknownPointAsync
-    /*private class DeleteUnknownPointAsync extends AsyncTask<Description,Void,Integer>
-    {
-        @Override
-        protected Integer doInBackground(Description... params)
-        {
-            Integer resultCode =0;
-            UnknownPointDAO unknownPointDAO = new UnknownPointDAO();
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
+    }
 
-            try{
-                resultCode=unknownPointDAO.deleteUnknownPoint(unknownPoint.idUnknownPoint);
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if(resultCode == 200){
-                DescriptionDAO descriptionDAO = new DescriptionDAO();
-
-                try{
-                    resultCode=descriptionDAO.addDescription(params[0]);
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            return resultCode;
-        }
-
-        @Override
-        protected void onPostExecute(Integer resultCode)
-        {
-            if(resultCode == HttpURLConnection.HTTP_OK){
-                Toast.makeText(getApplicationContext(), R.string.interest_point_create, Toast.LENGTH_SHORT).show();
-                Intent goToHomeConnected = new Intent(CreateDescriptionOfUnknownPointActivity.this, HomeConnectedActivity.class);
-                startActivity(goToHomeConnected);
-            }
-            else{
-                Toast.makeText(getApplicationContext(), "Erreur de création du point d'intérêt", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }*/
-
-    private class DeleteUnknownPointAndAddInterestPointAsync extends AsyncTask<Object,Void,Integer> //Si la supression fonctionne pas, l'ajout du point d'intéret est quand meme fait
+    private class DeleteUnknownPointAndAddInterestPointAsync extends AsyncTask<Object,Void,Integer>
     {
         @Override
         protected Integer doInBackground(Object... params)

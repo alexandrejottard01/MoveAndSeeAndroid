@@ -1,7 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -63,9 +66,17 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
                 String password = passwordString.getText().toString();
 
                 UserLogin userLogin = new UserLogin(pseudo,password);
-                new UserLoginAsync().execute(userLogin);
+                if(connectionInternetAvailable()){
+                    new UserLoginAsync().execute(userLogin);
+                }
             }
         });
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     @Override

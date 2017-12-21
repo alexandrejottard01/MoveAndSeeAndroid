@@ -1,9 +1,12 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -100,23 +103,21 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         addDescription.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            EditText explicationEditText = findViewById (R.id.explication_interest);
-            String explication = explicationEditText.getText().toString();
+                EditText explicationEditText = findViewById (R.id.explication_interest);
+                String explication = explicationEditText.getText().toString();
 
-            long idInterestPoint = interestPointWithVote.interestPoint.idInterestPoint;
-            Description description = new Description(explication,userCurrent.id,idInterestPoint);
+                long idInterestPoint = interestPointWithVote.interestPoint.idInterestPoint;
+                Description description = new Description(explication,userCurrent.id,idInterestPoint);
 
-            new AddDecriptionAsync().execute(description);
-
+                if(connectionInternetAvailable()){
+                    new AddDecriptionAsync().execute(description);
+                }
             }
         });
 
         setTokenInPreferences();
-
         String pseudo = getUsernameByToken(token);
         fillUserCurrentById(pseudo);
-
-
     }
 
     private void setTokenInPreferences(){
@@ -125,7 +126,9 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
     }
 
     private void fillUserCurrentById(String idUser){
-        new GetUserByIdAsync().execute(idUser);
+        if(connectionInternetAvailable()){
+            new GetUserByIdAsync().execute(idUser);
+        }
     }
 
     private String getUsernameByToken(String token){
@@ -192,6 +195,12 @@ public class CreateDescriptionOfInterestPointActivity extends AppCompatActivity 
         LatLng latitudeLongitude = new LatLng(latitude, longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latitudeLongitude, zoom);
         map.moveCamera(update);
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     //Classe AddDescriptionAsync

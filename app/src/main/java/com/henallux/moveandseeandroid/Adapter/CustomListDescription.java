@@ -39,7 +39,6 @@ public class CustomListDescription extends ArrayAdapter<DescriptionWithVote> {
     HomeConnectedActivity homeConnectedActivity;
 
     //View viewDescription;
-
     public CustomListDescription(@NonNull Context context, ArrayList<DescriptionWithVote> listDescription) {
         super(context, R.layout.list_view_descriptions, listDescription);
         homeConnectedActivity = (HomeConnectedActivity) context;

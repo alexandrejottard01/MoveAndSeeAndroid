@@ -1,7 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -88,8 +91,9 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
 
                 Description description = new Description(descriptionInterestPoint, userCurrent.id, interestPoint);
 
-                new AddInterestPointAndDescriptionAsync().execute(description);
-
+                if(connectionInternetAvailable()){
+                    new AddInterestPointAndDescriptionAsync().execute(description);
+                }
             }
         });
 
@@ -105,7 +109,9 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
     }
 
     private void fillUserCurrentById(String idUser){
-        new GetUserByIdAsync().execute(idUser);
+        if(connectionInternetAvailable()){
+            new GetUserByIdAsync().execute(idUser);
+        }
     }
 
     private String getUsernameByToken(String token){
@@ -168,6 +174,12 @@ public class CreateInterestPointActivity extends AppCompatActivity implements On
         LatLng latitudeLongitude = new LatLng(latitude, longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latitudeLongitude, zoom);
         map.moveCamera(update);
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     //Classe AddInterestPointAndDescriptionAsync

@@ -1,9 +1,12 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -77,8 +80,9 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
 
                 UnknownPoint unknownPoint = new UnknownPoint(userCurrent.id,latitude,longitude,dateCreation);
 
-                new AddUnknownPointAsync().execute(unknownPoint);
-
+                if(connectionInternetAvailable()){
+                    new AddUnknownPointAsync().execute(unknownPoint);
+                }
             }
         });
         setTokenInPreferences();
@@ -93,7 +97,9 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
     }
 
     private void fillUserCurrentById(String idUser){
-        new GetUserByIdAsync().execute(idUser);
+        if(connectionInternetAvailable()){
+            new GetUserByIdAsync().execute(idUser);
+        }
     }
 
     private String getUsernameByToken(String token){
@@ -181,6 +187,12 @@ public class CreateUnknownPointActivity extends AppCompatActivity implements OnM
         LatLng latitudeLongitude = new LatLng(latitude, longitude);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latitudeLongitude, zoom);
         map.moveCamera(update);
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     //Classe AddUnknownPointAsync

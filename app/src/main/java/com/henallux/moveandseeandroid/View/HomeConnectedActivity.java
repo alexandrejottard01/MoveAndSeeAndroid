@@ -8,6 +8,8 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -98,7 +100,9 @@ public class HomeConnectedActivity extends AppCompatActivity
 
     private void fillUserCurrentByToken(String token) {
         String pseudoUser = getUsernameByToken(token);
-        new GetUserByPseudoAsync().execute(pseudoUser);
+        if(connectionInternetAvailable()){
+            new GetUserByPseudoAsync().execute(pseudoUser);
+        }
     }
 
     private String getUsernameByToken(String token) {
@@ -157,7 +161,9 @@ public class HomeConnectedActivity extends AppCompatActivity
 
     private void displayInterestPoints(){
         try {
-            new GetAllInterestPointsAsync().execute();
+            if(connectionInternetAvailable()){
+                new GetAllInterestPointsAsync().execute();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +171,9 @@ public class HomeConnectedActivity extends AppCompatActivity
 
     private void displayUnknownPoints(){
         try {
-            new GetAllUnknownPointsAsync().execute();
+            if(connectionInternetAvailable()){
+                new GetAllUnknownPointsAsync().execute();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -188,7 +196,9 @@ public class HomeConnectedActivity extends AppCompatActivity
             long idInterestPointSelected = hashMap.get(marker);
 
             try{
-                interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointSelected).get();
+                if(connectionInternetAvailable()){
+                    interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointSelected).get();
+                }
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -222,10 +232,14 @@ public class HomeConnectedActivity extends AppCompatActivity
             public void onClick(View v) {
                 long idInterestPointCurrent = interestPointWithVoteCurrent.interestPoint.idInterestPoint;
                 VoteInterestPoint voteInterestPointNegative = new VoteInterestPoint(false,userCurrent.id,idInterestPointCurrent);
-                new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
+                if(connectionInternetAvailable()){
+                    new AddVoteInterestPointAsync().execute(voteInterestPointNegative);
+                }
 
                 try{
-                    interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    if(connectionInternetAvailable()){
+                        interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -244,10 +258,15 @@ public class HomeConnectedActivity extends AppCompatActivity
             public void onClick(View v) {
                 long idInterestPointCurrent = interestPointWithVoteCurrent.interestPoint.idInterestPoint;
                 VoteInterestPoint voteInterestPointPositive = new VoteInterestPoint(true,userCurrent.id,idInterestPointCurrent);
-                new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
+                if(connectionInternetAvailable()){
+                    new AddVoteInterestPointAsync().execute(voteInterestPointPositive);
+                }
+
 
                 try{
-                    interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    if(connectionInternetAvailable()){
+                        interestPointWithVoteCurrent = new GetInterestPointByIdAsync().execute(idInterestPointCurrent).get();
+                    }
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -328,7 +347,9 @@ public class HomeConnectedActivity extends AppCompatActivity
 
     private void fillDescriptionsInterestPointInLayout(InterestPointWithVote interestPointWithVote){
         listDescription = findViewById(R.id.list_description);
-        new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
+        if(connectionInternetAvailable()){
+            new GetAllDescriptionByInterestPointAsync().execute(interestPointWithVote);
+        }
     }
 
     private void alertGoogleServicesNotAvailable(){
@@ -385,6 +406,12 @@ public class HomeConnectedActivity extends AppCompatActivity
                 hashMap.put(marker, item.interestPoint.idInterestPoint);
             }
         }
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     private class GetAllUnknownPointsAsync extends AsyncTask<String,Void,ArrayList<UnknownPoint>>

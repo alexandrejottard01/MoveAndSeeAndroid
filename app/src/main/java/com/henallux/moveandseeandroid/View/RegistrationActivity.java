@@ -1,7 +1,10 @@
 package com.henallux.moveandseeandroid.View;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -54,13 +57,21 @@ public class RegistrationActivity extends AppCompatActivity {
 
                 if(password.compareTo(confirmationPassword) == 0){
                     User user = new User(pseudo,false,password,email,"French");
-                    new UserRegisterAsync().execute(user);
+                    if(connectionInternetAvailable()){
+                        new UserRegisterAsync().execute(user);
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), R.string.different_passwords, Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    private boolean connectionInternetAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     private class UserRegisterAsync extends AsyncTask<User, Void, Integer> {
