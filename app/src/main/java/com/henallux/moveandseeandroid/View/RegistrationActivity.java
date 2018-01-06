@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.henallux.moveandseeandroid.DAO.LoginDAO;
 import com.henallux.moveandseeandroid.DAO.UserDAO;
+import com.henallux.moveandseeandroid.Enumeration.RegistrationCodeErrorEnumeration;
 import com.henallux.moveandseeandroid.Model.AccessToken;
 import com.henallux.moveandseeandroid.Model.User;
 import com.henallux.moveandseeandroid.Model.UserLogin;
@@ -55,17 +56,32 @@ public class RegistrationActivity extends AppCompatActivity {
                 EditText confirmationPasswordString = findViewById (R.id.confirmation_password);
                 String confirmationPassword = confirmationPasswordString.getText().toString();
 
-                if(password.compareTo(confirmationPassword) == 0){
-                    User user = new User(pseudo,false,password,email,"French");
-                    if(connectionInternetAvailable()){
-                        new UserRegisterAsync().execute(user);
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
-                    }
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), R.string.different_passwords, Toast.LENGTH_SHORT).show();
+                User user = new User(pseudo,false,password,email,"French");
+
+                RegistrationCodeErrorEnumeration code = user.isValid(confirmationPassword);
+                switch (code){
+                    case BAD_PSEUDO:
+                        Toast.makeText(RegistrationActivity.this, com.henallux.moveandseeandroid.R.string.PseudoError, Toast.LENGTH_SHORT).show();
+                        break;
+                    case BAD_EMAIL:
+                        Toast.makeText(RegistrationActivity.this, com.henallux.moveandseeandroid.R.string.emailError, Toast.LENGTH_SHORT).show();
+                        break;
+                    case BAD_PASSWORD:
+                        Toast.makeText(RegistrationActivity.this, com.henallux.moveandseeandroid.R.string.passwordError, Toast.LENGTH_SHORT).show();
+                        break;
+                    case PASSWORD_MISS_MATCH:
+                        Toast.makeText(RegistrationActivity.this, R.string.different_passwords, Toast.LENGTH_SHORT).show();
+                        break;
+                    case OK:
+                        if(connectionInternetAvailable()){
+                            new UserRegisterAsync().execute(user);
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), R.string.not_internet, Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    default:
+                        Toast.makeText(RegistrationActivity.this, com.henallux.moveandseeandroid.R.string.errer_unknown, Toast.LENGTH_SHORT).show();
                 }
             }
         });

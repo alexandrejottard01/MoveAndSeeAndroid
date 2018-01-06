@@ -48,4 +48,9 @@
     <string name="not_certified">Not certified</string>
     <string name="email">"Mail : "</string>
     <string name="not_internet">Not connection internet</string>
+    <string name="PseudoError">Le pseudo doit contenir minimum 4 caratères</string>
+    <string name="user_not_found">The nickname must contain at least 4 characters</string>
+    <string name="errer_unknown">An unexpected error occurred</string>
+    <string name="passwordError">Password must contain at least 8 characters</string>
+    <string name="emailError">The email is incorrect</string>
 </resources>

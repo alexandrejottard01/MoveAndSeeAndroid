@@ -50,4 +50,8 @@
     <string name="username">"Pseudo : "</string>
     <string name="not_internet">Pas de connexion internet</string>
     <string name="user_not_found">User non trouvé</string>
+    <string name="errer_unknown">Une erreur innatendue est survenue</string>
+    <string name="passwordError">Le mot de passe doit contenir minimum 8 caractères</string>
+    <string name="emailError">L\'email est incorrect</string>
+    <string name="PseudoError">Le pseudo doit contenir minimum 4 caratères</string>
 </resources>
