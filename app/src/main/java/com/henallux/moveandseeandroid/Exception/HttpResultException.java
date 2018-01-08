@@ -1,5 +1,9 @@
 package com.henallux.moveandseeandroid.Exception;
 
+import android.content.res.Resources;
+
+import java.net.HttpURLConnection;
+
 /**
  * Created by Alexandre on 01-12-17.
  */

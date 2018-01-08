@@ -1,7 +1,5 @@
 package com.henallux.moveandseeandroid.DAO;
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.henallux.moveandseeandroid.Exception.HttpResultException;
@@ -29,10 +27,10 @@ public class LoginDAO {
         connection.setDoInput(true);
         connection.setDoOutput(true);
         connection.setRequestProperty("Content-Type", "application/json");
-        byte[] outputBytes = outputJsonString.getBytes("UTF-8");
-        OutputStream outputStream = connection.getOutputStream();
+        byte[] outputBytes = outputJsonString.getBytes("UTF-8"); //Convertis en bytes sous le format...
+        OutputStream outputStream = connection.getOutputStream(); //canal de sortie
         outputStream.write(outputBytes);
-        outputStream.flush();
+        outputStream.flush(); //vide cache (bof)
         outputStream.close();
         if(connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -46,7 +44,6 @@ public class LoginDAO {
             bufferedReader.close();
             connection.disconnect();
             inputJsonString = stringBuilder.toString();
-            Log.i("Contenu inputJsonString", inputJsonString);
 
             return gson.fromJson(inputJsonString,AccessToken.class);
         }

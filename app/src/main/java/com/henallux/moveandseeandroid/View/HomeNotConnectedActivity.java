@@ -117,10 +117,14 @@ public class HomeNotConnectedActivity extends AppCompatActivity {
                 preferences = PreferenceManager.getDefaultSharedPreferences(HomeNotConnectedActivity.this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("token",token.getToken());
-                editor.commit();
+                if(editor.commit()) {
+                    Intent intentToHomeConnected = new Intent(HomeNotConnectedActivity.this, HomeConnectedActivity.class);
+                    startActivity(intentToHomeConnected);
+                }else {
+                    Toast.makeText(HomeNotConnectedActivity.this, com.henallux.moveandseeandroid.R.string.error_token, Toast.LENGTH_SHORT).show();
+                }
 
-                Intent intentToHomeConnected = new Intent(HomeNotConnectedActivity.this, HomeConnectedActivity.class);
-                startActivity(intentToHomeConnected);
+
             }else{
                 switch (resultCode){
                     case HttpURLConnection.HTTP_UNAUTHORIZED:

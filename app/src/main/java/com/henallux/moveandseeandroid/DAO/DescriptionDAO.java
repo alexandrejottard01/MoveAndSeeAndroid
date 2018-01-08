@@ -32,7 +32,7 @@ public class DescriptionDAO {
     public ArrayList<DescriptionWithVote> getAllDescriptionsByInterestPoint(String token, long idInterestPoint)throws Exception{
         ArrayList<DescriptionWithVote> listDescription = new ArrayList<>();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
-        URL url = new URL("http://moveandsee.azurewebsites.net/api/Description/GetAllDescriptionsByInterestPoint/" +idInterestPoint);
+        URL url = new URL(Constants.ADDRESS_API + "Description/GetAllDescriptionsByInterestPoint/" +idInterestPoint);
         HttpURLConnection connection = (HttpURLConnection)url.openConnection();
         connection.setRequestMethod("GET");
         connection.setRequestProperty("Authorization", "Bearer " + token);

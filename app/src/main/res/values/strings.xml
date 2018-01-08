@@ -53,4 +53,5 @@
     <string name="errer_unknown">An unexpected error occurred</string>
     <string name="passwordError">Password must contain at least 8 characters</string>
     <string name="emailError">The email is incorrect</string>
+    <string name="error_token">An error occurred while saving the token</string>
 </resources>

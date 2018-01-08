@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorLightBlue">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="250dp" />
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/name_interest_point"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:hint="Nom de l'intérêt"
+            android:inputType="textPersonName"
+            android:paddingBottom="5dp"
+            android:textColorLink="@color/cast_expanded_controller_background_color"
+            android:backgroundTint="@color/colorDarkBlue"
+            android:textColorHint="@color/colorLightGrayBlue"
+            android:textAlignment="textStart"/>
+
+        <EditText
+            android:id="@+id/explication_interest"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:layout_below="@+id/name_interest_point"
+            android:layout_centerHorizontal="false"
+            android:layout_margin="10dp"
+            android:background="@drawable/border_add_description"
+            android:ems="10"
+            android:gravity="top"
+            android:hint="Description de l'intérêt"
+            android:inputType="textMultiLine"
+            android:textAlignment="center"
+            android:textColorLink="@color/cast_expanded_controller_background_color"
+            android:textColorHint="@color/colorLightGrayBlue"/>
+
+        <Button
+            android:id="@+id/button_submit_interest_point"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@+id/explication_interest"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/design_button"
+            android:text="@string/button_submit"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

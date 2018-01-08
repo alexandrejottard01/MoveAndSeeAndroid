@@ -54,4 +54,6 @@
     <string name="passwordError">Le mot de passe doit contenir minimum 8 caractères</string>
     <string name="emailError">L\'email est incorrect</string>
     <string name="PseudoError">Le pseudo doit contenir minimum 4 caratères</string>
+    <string name="error_token">Une erreur est survenue lors de l\'enregistrement du token</string>
+    <string name="error_server">Le serveur a des problèmes</string>
 </resources>
